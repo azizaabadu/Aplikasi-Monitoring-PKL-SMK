@@ -13,7 +13,14 @@ return new class extends Migration
     {
         Schema::create('absensis', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+    $table->foreignId('siswa_id')->constrained('siswas')->onDelete('cascade');
+    $table->date('tanggal');
+    $table->time('jam_masuk')->nullable();
+    $table->time('jam_pulang')->nullable();
+    $table->enum('status', ['Hadir', 'Izin', 'Sakit', 'Alfa'])->default('Hadir');
+    $table->string('foto_selifie')->nullable(); // Foto bukti kehadiran
+    $table->string('lokasi')->nullable(); // Koordinat GPS / keterangan lokasi
+    $table->timestamps();
         });
     }
 

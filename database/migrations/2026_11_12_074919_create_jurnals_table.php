@@ -13,7 +13,13 @@ return new class extends Migration
     {
         Schema::create('jurnals', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+    $table->foreignId('siswa_id')->constrained('siswas')->onDelete('cascade'); // Relasi ke siswa yang mengisi
+    $table->date('tanggal'); // Tanggal kegiatan harian
+    $table->text('kegiatan'); // Deskripsi pekerjaan/kegiatan PKL
+    $table->string('foto')->nullable(); // Bukti dokumentasi kegiatan
+    $table->enum('status', ['Pending', 'Disetujui', 'Ditolak'])->default('Pending'); // Status validasi pembimbing
+    $table->text('catatan_pembimbing')->nullable(); // Catatan dari guru/pembimbing industri
+    $table->timestamps();
         });
     }
 

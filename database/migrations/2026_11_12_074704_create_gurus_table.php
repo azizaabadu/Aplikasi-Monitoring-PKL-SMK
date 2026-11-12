@@ -13,7 +13,11 @@ return new class extends Migration
     {
         Schema::create('gurus', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+$table->foreignId('user_id')->constrained()->onDelete('cascade');
+$table->string('nip')->unique()->nullable();
+$table->string('nama');
+$table->string('kontak')->nullable();
+$table->timestamps();
         });
     }
 

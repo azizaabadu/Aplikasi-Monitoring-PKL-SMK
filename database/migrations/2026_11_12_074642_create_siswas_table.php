@@ -13,7 +13,16 @@ return new class extends Migration
     {
         Schema::create('siswas', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+    $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Relasi ke tabel users untuk login
+    $table->foreignId('guru_id')->nullable()->constrained('gurus')->onDelete('set null'); // Guru pembimbing
+    $table->foreignId('dudi_id')->nullable()->constrained('dudis')->onDelete('set null'); // Tempat PKL / DUDI
+    $table->string('nis')->unique();
+    $table->string('nama');
+    $table->string('kelas');
+    $table->string('jurusan');
+    $table->text('alamat')->nullable();
+    $table->string('kontak')->nullable();
+    $table->timestamps();
         });
     }
 
