@@ -1,0 +1,33 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('orang_tuas', function (Blueprint $table) {
+            $table->id();
+    $table->foreignId('siswa_id')->constrained('siswas')->onDelete('cascade'); // Relasi ke siswa (anaknya)
+    $table->string('nama_ayah')->nullable();
+    $table->string('nama_ibu')->nullable();
+    $table->string('nama_wali')->nullable(); // Opsional jika ada wali selain orang tua kandung
+    $table->string('kontak')->nullable(); // Nomor HP/WhatsApp yang bisa dihubungi
+    $table->text('alamat')->nullable();
+    $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('orang_tuas');
+    }
+};

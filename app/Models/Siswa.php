@@ -35,4 +35,8 @@ public function penilaians()
 {
     return $this->hasMany(Penilaian::class);
 }
+public function orangTua()
+{
+    return $this->hasOne(OrangTua::class);
+}
 }
