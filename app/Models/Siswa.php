@@ -2,41 +2,58 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Siswa extends Model
 {
-    public function user()
-{
-    return $this->belongsTo(User::class);
-}
+    use HasFactory;
 
-public function guru()
-{
-    return $this->belongsTo(Guru::class, 'guru_id');
-}
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 
-public function dudi()
-{
-    return $this->belongsTo(Dudi::class, 'dudi_id');
-}
+    public function guru(): BelongsTo
+    {
+        return $this->belongsTo(Guru::class, 'guru_id');
+    }
 
-public function jurnals()
-{
-    return $this->hasMany(Jurnal::class);
-}
+    public function dudi(): BelongsTo
+    {
+        return $this->belongsTo(Dudi::class, 'dudi_id');
+    }
 
-public function absensis()
-{
-    return $this->hasMany(Absensi::class);
-}
+    public function jurnals(): HasMany
+    {
+        return $this->hasMany(Jurnal::class);
+    }
 
-public function penilaians()
-{
-    return $this->hasMany(Penilaian::class);
-}
-public function orangTua()
-{
-    return $this->hasOne(OrangTua::class);
-}
+    public function absensis(): HasMany
+    {
+        return $this->hasMany(Absensi::class);
+    }
+
+    public function penilaians(): HasMany
+    {
+        return $this->hasMany(Penilaian::class);
+    }
+
+    public function orangTua(): HasOne
+    {
+        return $this->hasOne(OrangTua::class);
+    }
+
+    public function pilihanMitras(): HasMany
+    {
+        return $this->hasMany(PilihanMitra::class);
+    }
+
+    public function penempatans(): HasMany
+    {
+        return $this->hasMany(Penempatan::class);
+    }
 }
