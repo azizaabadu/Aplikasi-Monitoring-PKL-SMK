@@ -7,10 +7,11 @@ use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'email', 'password'])]
+#[Fillable(['name', 'username', 'email', 'password', 'peran', 'aktif'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -27,16 +28,27 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'aktif' => 'boolean',
         ];
     }
 
-    public function guru()
-{
-    return $this->hasOne(Guru::class);
-}
+    public function guru(): HasOne
+    {
+        return $this->hasOne(Guru::class);
+    }
 
-public function siswa()
-{
-    return $this->hasOne(Siswa::class);
-}
+    public function siswa(): HasOne
+    {
+        return $this->hasOne(Siswa::class);
+    }
+
+    public function dudi(): HasOne
+    {
+        return $this->hasOne(Dudi::class);
+    }
+
+    public function orangTua(): HasOne
+    {
+        return $this->hasOne(OrangTua::class);
+    }
 }
