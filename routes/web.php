@@ -25,6 +25,10 @@ Route::middleware(['auth', 'role:siswa,guru,pembimbing_dudi,orang_tua,kepala_sek
     Route::delete('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
     Route::get('/dashboard', function (Request $request) {
+        if ($request->user()->peran === 'siswa') {
+            return redirect()->route('siswa.dashboard');
+        }
+
         return response()->json([
             'user' => $request->user()->only(['id', 'name', 'username', 'peran']),
             'message' => 'Autentikasi berhasil.',
@@ -67,6 +71,9 @@ Route::middleware(['auth', 'role:siswa,guru,pembimbing_dudi,orang_tua,kepala_sek
     });
 
     Route::prefix('siswa')->name('siswa.')->middleware('role:siswa')->group(function (): void {
+        Route::view('/dashboard', 'siswa.dashboard')->name('dashboard');
+        Route::view('/logbook', 'siswa.logbook')->name('logbook');
+
         Route::get('/periode/{periodePkl}/pilihan-mitra', [PilihanMitraController::class, 'index'])
             ->name('pilihan-mitra.index');
         Route::put('/periode/{periodePkl}/pilihan-mitra', [PilihanMitraController::class, 'update'])
@@ -94,6 +101,3 @@ Route::middleware(['auth', 'role:siswa,guru,pembimbing_dudi,orang_tua,kepala_sek
 });
 
 
-Route::get('/siswa/dashboard', function () {
-    return view('siswa.dashboard');
-});
