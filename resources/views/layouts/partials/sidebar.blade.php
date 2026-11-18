@@ -3,11 +3,7 @@
     <!-- Brand Header & Logo PKL.ID -->
     <div class="p-5 flex items-center gap-3 border-b border-white/10">
       <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-[#1E3A6D] to-[#0F1E38] border border-sky-400/30 flex items-center justify-center shadow-inner shrink-0">
-        <svg viewBox="0 0 64 64" class="w-8 h-8" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M32 6L56 30L32 54L8 30L32 6Z" stroke="#38BDF8" stroke-width="3.5" stroke-linejoin="round"/>
-          <path d="M32 14L48 30L32 46L16 30L32 14Z" stroke="#93C5FD" stroke-width="2" stroke-opacity="0.7"/>
-          <text x="32" y="35" text-anchor="middle" fill="#FFFFFF" font-size="14" font-weight="800" font-family="Plus Jakarta Sans, sans-serif" letter-spacing="0.5">PKL</text>
-        </svg>
+        <i class="fa-solid fa-graduation-cap text-sky-400 text-lg"></i>
       </div>
       <div>
         <div class="font-extrabold text-lg tracking-tight leading-none text-white">PKL.ID</div>
@@ -17,44 +13,73 @@
       </div>
     </div>
 
-    <!-- Label Navigasi -->
+    <!-- Label Navigasi Sistem -->
     <div class="px-5 pt-5 pb-2">
       <div class="bg-white/5 rounded-md px-3 py-1.5 text-[10px] font-bold tracking-wider text-slate-400 uppercase">
         Navigasi Siswa
       </div>
     </div>
 
-    <!-- Menu Navigasi Sesuai PRD -->
+    <!-- Menu Navigasi Sesuai PRD dengan Font Awesome -->
     <nav class="px-3 space-y-1.5 text-xs font-semibold">
-      <a href="{{ route('siswa.dashboard') }}#dashboard" onclick="if (typeof switchTab === 'function') { switchTab('tab-dashboard'); return false; }" class="flex items-center gap-3 px-3.5 py-3 rounded-xl text-white hover:bg-white/10 transition">
-        <svg class="w-4 h-4 text-sky-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/></svg>
+      <!-- 1. Beranda / Dashboard -->
+      <a href="{{ route('siswa.dashboard') }}" class="flex items-center gap-3 px-3.5 py-3 rounded-xl {{ request()->routeIs('siswa.dashboard') ? 'bg-sky-600 text-white shadow-md' : 'text-white hover:bg-white/10' }} transition">
+        <i class="fa-solid fa-house text-sky-400 w-4 text-center"></i>
         <span>Beranda / Dashboard</span>
       </a>
 
-      <a href="{{ route('siswa.dashboard') }}#checkin" onclick="if (typeof switchTab === 'function') { switchTab('tab-checkin'); return false; }" class="flex items-center gap-3 px-3.5 py-3 rounded-xl text-white hover:bg-white/10 transition">
-        <svg class="w-4 h-4 text-sky-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-        <span>Check-in Harian (K1)</span>
+      <!-- 2. Presensi & Kehadiran (Check-in K1) -->
+      <a href="{{ route('siswa.checkin') }}" class="flex items-center gap-3 px-3.5 py-3 rounded-xl {{ request()->routeIs('siswa.checkin') ? 'bg-sky-600 text-white shadow-md' : 'text-white hover:bg-white/10' }} transition">
+        <i class="fa-solid fa-clipboard-user text-sky-400 w-4 text-center"></i>
+        <span>Presensi & Kehadiran</span>
       </a>
 
-      <a href="{{ route('siswa.dashboard') }}#logbook" onclick="if (typeof switchTab === 'function') { switchTab('tab-logbook'); return false; }" class="flex items-center gap-3 px-3.5 py-3 rounded-xl text-white hover:bg-white/10 transition">
-        <svg class="w-4 h-4 text-sky-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
-        <span>Logbook Harian (L1 & L2)</span>
+      <!-- 3. Jurnal & Logbook (L1 & L2) -->
+      <a href="{{ route('siswa.logbook') }}" class="flex items-center gap-3 px-3.5 py-3 rounded-xl {{ request()->routeIs('siswa.logbook') ? 'bg-sky-600 text-white shadow-md' : 'text-white hover:bg-white/10' }} transition">
+        <i class="fa-solid fa-book-open text-sky-400 w-4 text-center"></i>
+        <span>Jurnal & Logbook</span>
       </a>
 
-      <a href="{{ route('siswa.dashboard') }}#mitra" onclick="if (typeof switchTab === 'function') { switchTab('tab-mitra'); return false; }" class="flex items-center gap-3 px-3.5 py-3 rounded-xl text-white hover:bg-white/10 transition">
-        <svg class="w-4 h-4 text-sky-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
-        <span>Info Mitra & Pembimbing</span>
+      <!-- 4. Data Siswa & DUDI -->
+      <a href="{{ route('siswa.penempatan') }}" class="flex items-center gap-3 px-3.5 py-3 rounded-xl {{ request()->routeIs('siswa.penempatan') ? 'bg-sky-600 text-white shadow-md' : 'text-white hover:bg-white/10' }} transition">
+        <i class="fa-solid fa-building-user text-sky-400 w-4 text-center"></i>
+        <span>Data Siswa & DUDI</span>
+      </a>
+
+      <!-- 5. Penilaian & Sertifikat -->
+      <a href="{{ route('siswa.penilaian') }}" class="flex items-center gap-3 px-3.5 py-3 rounded-xl {{ request()->routeIs('siswa.penilaian') ? 'bg-sky-600 text-white shadow-md' : 'text-white hover:bg-white/10' }} transition">
+        <i class="fa-solid fa-award text-sky-400 w-4 text-center"></i>
+        <span>Penilaian & Sertifikat</span>
+      </a>
+
+      <!-- 6. Laporan & Rekapitulasi -->
+      <a href="{{ route('siswa.laporan') }}" class="flex items-center gap-3 px-3.5 py-3 rounded-xl {{ request()->routeIs('siswa.laporan') ? 'bg-sky-600 text-white shadow-md' : 'text-white hover:bg-white/10' }} transition">
+        <i class="fa-solid fa-file-lines text-sky-400 w-4 text-center"></i>
+        <span>Laporan & Rekapitulasi</span>
+      </a>
+
+      <!-- 7. Pengaturan -->
+      <a href="{{ route('siswa.pengaturan') }}" class="flex items-center gap-3 px-3.5 py-3 rounded-xl {{ request()->routeIs('siswa.pengaturan') ? 'bg-sky-600 text-white shadow-md' : 'text-white hover:bg-white/10' }} transition">
+        <i class="fa-solid fa-gear text-sky-400 w-4 text-center"></i>
+        <span>Pengaturan</span>
       </a>
     </nav>
   </div>
 
-  <!-- Footer Sekolah -->
-  <div class="p-4 border-t border-white/10">
+  <!-- Footer Sekolah & Tombol Keluar -->
+  <div class="p-4 border-t border-white/10 space-y-3">
     <div class="flex items-center gap-2.5 text-xs text-slate-300 bg-white/5 px-3 py-2.5 rounded-xl">
-      <svg class="w-4 h-4 text-sky-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5z"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/>
-      </svg>
+      <i class="fa-solid fa-school text-sky-400"></i>
       <span class="font-semibold truncate">SMK Negeri 1 Batam</span>
     </div>
+
+    <!-- Tombol Keluar / Logout -->
+   <form action="{{ route('logout') }}" method="POST">
+    @csrf
+    @method('DELETE')
+    <button type="submit" class="w-full py-2.5 px-4 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20 font-bold text-xs transition flex items-center justify-center gap-2">
+        <i class="fa-solid fa-right-from-bracket"></i> Keluar / Log Out
+    </button>
+</form>
   </div>
 </aside>

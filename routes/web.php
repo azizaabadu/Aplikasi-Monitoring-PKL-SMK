@@ -22,7 +22,7 @@ Route::middleware('guest')->group(function (): void {
 });
 
 Route::middleware(['auth', 'role:siswa,guru,pembimbing_dudi,orang_tua,kepala_sekolah,admin'])->group(function (): void {
-    Route::delete('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+    Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
     Route::get('/dashboard', function (Request $request) {
         if ($request->user()->peran === 'siswa') {
@@ -72,7 +72,12 @@ Route::middleware(['auth', 'role:siswa,guru,pembimbing_dudi,orang_tua,kepala_sek
 
     Route::prefix('siswa')->name('siswa.')->middleware('role:siswa')->group(function (): void {
         Route::view('/dashboard', 'siswa.dashboard')->name('dashboard');
-        Route::view('/logbook', 'siswa.logbook')->name('logbook');
+        Route::view('/checkin', 'siswa.checkin')->name('checkin');
+        Route::view('/logbook', 'siswa.logbook')->name('logbook'); // <-- Diperbaiki agar rute logbook aktif
+        Route::view('/penempatan', 'siswa.penempatan')->name('penempatan');
+        Route::view('/penilaian', 'siswa.penilaian')->name('penilaian');
+        Route::view('/laporan', 'siswa.laporan')->name('laporan');
+        Route::view('/pengaturan', 'siswa.pengaturan')->name('pengaturan');
 
         Route::get('/periode/{periodePkl}/pilihan-mitra', [PilihanMitraController::class, 'index'])
             ->name('pilihan-mitra.index');
@@ -99,5 +104,3 @@ Route::middleware(['auth', 'role:siswa,guru,pembimbing_dudi,orang_tua,kepala_sek
         ]))->name('dashboard');
     });
 });
-
-

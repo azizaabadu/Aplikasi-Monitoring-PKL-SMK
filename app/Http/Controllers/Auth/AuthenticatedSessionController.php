@@ -19,9 +19,11 @@ class AuthenticatedSessionController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
+        // 1. Validasi input termasuk field 'peran'
         $credentials = $request->validate([
             'username' => ['required', 'string', 'max:255'],
             'password' => ['required', 'string'],
+            'peran'    => ['required', 'string'],
         ]);
 
         $throttleKey = Str::transliterate(
@@ -36,22 +38,36 @@ class AuthenticatedSessionController extends Controller
             ])->onlyInput('username');
         }
 
+        // 2. Cocokkan kredensial beserta kolom peran dan status aktif di database
         if (! Auth::attempt([
             'username' => $credentials['username'],
             'password' => $credentials['password'],
-            'aktif' => true,
+            'peran'    => $credentials['peran'],
+            'aktif'    => true,
         ], $request->boolean('remember'))) {
             RateLimiter::hit($throttleKey, 60);
 
             return back()->withErrors([
-                'username' => 'Username atau kata sandi tidak sesuai, atau akun tidak aktif.',
+                'username' => 'Username, kata sandi, atau peran yang dipilih tidak sesuai.',
             ])->onlyInput('username');
         }
 
         RateLimiter::clear($throttleKey);
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard'));
+        // 3. Arahkan pengguna ke dashboard sesuai perannya masing-masing
+        $user = Auth::user();
+        if ($user->peran === 'admin') {
+            return redirect()->route('admin.dashboard'); // Pastikan rute ini ada di web.php
+        } elseif ($user->peran === 'guru') {
+            return redirect()->route('guru.dashboard');
+        } elseif ($user->peran === 'dudi') {
+            return redirect()->route('dudi.dashboard');
+        } elseif ($user->peran === 'orang_tua') {
+            return redirect()->route('orangtua.dashboard');
+        }
+
+        return redirect()->route('siswa.dashboard');
     }
 
     public function destroy(Request $request): RedirectResponse
