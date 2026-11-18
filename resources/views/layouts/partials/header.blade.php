@@ -1,4 +1,3 @@
-<!-- TOP HEADER BAR -->
 <header class="sticky top-0 z-30 bg-white border-b border-slate-200/80 px-4 sm:px-8 h-16 flex items-center justify-between gap-4">
   <div class="flex items-center gap-3 flex-1 max-w-md">
     <!-- Tombol Hamburger Mobile -->

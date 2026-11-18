@@ -12,7 +12,7 @@
 </head>
 <body class="bg-slate-100 text-slate-800 antialiased min-h-screen flex items-center justify-center p-4">
 
-  <!-- Kontainer Utama Dikecilkan Menjadi max-w-4xl -->
+  <!-- Kontainer Utama -->
   <div class="w-full max-w-4xl bg-white rounded-3xl shadow-xl overflow-hidden flex flex-col lg:flex-row border border-slate-200/80">
 
     <!-- SISI KIRI: Branding & Logo Geometris PKL.ID -->
@@ -27,7 +27,7 @@
         </span>
       </div>
 
-      <!-- Logo Center 3D Dikecilkan -->
+      <!-- Logo Center 3D -->
       <div class="relative z-10 my-auto py-6 flex flex-col items-center text-center">
         <div class="w-32 h-32 sm:w-36 sm:h-36 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center shadow-inner backdrop-blur-sm p-3 mb-4">
           <svg viewBox="0 0 64 64" class="w-20 h-20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -48,7 +48,7 @@
       </div>
     </div>
 
-    <!-- SISI KANAN: Form Masuk Dikecilkan Padding-nya -->
+    <!-- SISI KANAN: Form Masuk -->
     <div class="lg:w-7/12 p-6 sm:p-8 lg:p-10 flex flex-col justify-center bg-white">
       <div class="max-w-sm w-full mx-auto space-y-4">
         
@@ -69,22 +69,36 @@
           </p>
         </div>
 
-        <!-- Form Login -->
+        <!-- Menampilkan Pesan Error Validasi jika ada -->
         @if ($errors->any())
-          <div class="rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-[11px] font-semibold text-rose-700" role="alert">
-            {{ $errors->first() }}
+          <div class="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-600 text-[11px] font-medium">
+            Username atau kata sandi tidak sesuai, atau akun tidak aktif.
           </div>
         @endif
 
-        <form method="POST" action="{{ route('login.store') }}" class="space-y-3">
+        <!-- Form Login Terhubung ke Controller Laravel -->
+        <form action="{{ route('login') }}" method="POST" class="space-y-3">
           @csrf
+          
+          <!-- Pilihan Peran -->
+          <div>
+            <label class="block text-[11px] font-bold text-slate-700 mb-1">Masuk Sebagai / Peran Akun</label>
+            <select name="peran" class="w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-xs font-semibold text-slate-800 focus:outline-none focus:border-sky-500 focus:bg-white transition">
+  <option value="siswa" {{ old('peran') == 'siswa' ? 'selected' : '' }}>Siswa SMK (Praktik Kerja Lapangan)</option>
+  <option value="guru" {{ old('peran') == 'guru' ? 'selected' : '' }}>Guru Pembimbing Sekolah</option>
+  <option value="dudi" {{ old('peran') == 'dudi' ? 'selected' : '' }}>Pembimbing Lapangan (DUDI)</option>
+  <option value="ortu" {{ old('peran') == 'ortu' ? 'selected' : '' }}>Orang Tua / Wali Siswa</option>
+  <option value="kepsek" {{ old('peran') == 'kepsek' ? 'selected' : '' }}>Kepala Sekolah</option>
+  <option value="admin" {{ old('peran') == 'admin' ? 'selected' : '' }}>Admin PKL / Tata Usaha</option>
+</select>
+          </div>
 
           <!-- NISN / Username -->
           <div>
             <label class="block text-[11px] font-bold text-slate-700 mb-1">NISN / NIP / Username</label>
             <div class="relative">
               <svg class="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-              <input type="text" name="username" value="{{ old('username') }}" autocomplete="username" autofocus placeholder="Contoh: 0058291823" required class="w-full rounded-xl border border-slate-300 bg-slate-50 pl-9 pr-3 py-2.5 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-sky-500 focus:bg-white transition" />
+              <input type="text" name="username" value="{{ old('username') }}" placeholder="Contoh: siswa2" required class="w-full rounded-xl border border-slate-300 bg-slate-50 pl-9 pr-3 py-2.5 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-sky-500 focus:bg-white transition" />
             </div>
           </div>
 
@@ -96,21 +110,21 @@
             </div>
             <div class="relative">
               <svg class="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002-2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-              <input type="password" name="password" autocomplete="current-password" placeholder="••••••••••••" required class="w-full rounded-xl border border-slate-300 bg-slate-50 pl-9 pr-3 py-2.5 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-sky-500 focus:bg-white transition" />
+              <input type="password" name="password" placeholder="••••••••••••" required class="w-full rounded-xl border border-slate-300 bg-slate-50 pl-9 pr-3 py-2.5 text-xs font-medium text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-sky-500 focus:bg-white transition" />
             </div>
           </div>
 
           <!-- Ingat Saya -->
           <div class="flex items-center pt-0.5">
             <label class="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" name="remember" value="1" class="w-3.5 h-3.5 rounded border-slate-300 text-sky-600 focus:ring-sky-500" />
+              <input type="checkbox" name="remember" class="w-3.5 h-3.5 rounded border-slate-300 text-sky-600 focus:ring-sky-500" />
               <span class="text-[11px] font-medium text-slate-600">Ingat sesi saya di perangkat ini</span>
             </label>
           </div>
 
           <!-- Tombol Masuk -->
           <button type="submit" class="w-full py-3 rounded-xl bg-[#172B4D] hover:bg-[#1E3A6D] text-white text-xs font-bold shadow transition flex items-center justify-center gap-2 mt-1">
-            <span>Masuk</span>
+            <span>Masuk ke Dashboard</span>
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
           </button>
         </form>
