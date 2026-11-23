@@ -11,6 +11,7 @@ use App\Models\Dudi;
 use App\Models\PeriodePkl;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\MitraDudiController;
 
 Route::get('/', function () {
     return auth()->check() ? redirect()->route('dashboard') : redirect()->route('login');
@@ -41,7 +42,8 @@ Route::middleware(['auth', 'role:siswa,guru,pembimbing_dudi,orang_tua,kepala_sek
 
     Route::prefix('admin')->name('admin.')->middleware('role:admin')->group(function (): void {
         Route::view('/dashboard', 'admin.dashboard')->name('dashboard');
-        Route::view('/kemitraan-dudi', 'admin.dudi-mou')->name('dudi-mou');
+        Route::get('/kemitraan-dudi', [MitraDudiController::class, 'index'])->name('dudi-mou');
+        Route::post('/kemitraan-dudi', [MitraDudiController::class, 'store'])->name('dudi-mou.store');
         Route::view('/monitoring-pembimbing', 'admin.monitoring-pembimbing')->name('monitoring-pembimbing');
         Route::view('/manajemen-siswa', 'admin.manajemen-siswa')->name('manajemen-siswa');
         Route::view('/rekapitulasi-nilai', 'admin.rekapitulasi-nilai')->name('rekapitulasi-nilai');
