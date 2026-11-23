@@ -29,6 +29,10 @@ Route::middleware(['auth', 'role:siswa,guru,pembimbing_dudi,orang_tua,kepala_sek
             return redirect()->route('siswa.dashboard');
         }
 
+        if ($request->user()->peran === 'admin') {
+            return redirect()->route('admin.dashboard');
+        }
+
         return response()->json([
             'user' => $request->user()->only(['id', 'name', 'username', 'peran']),
             'message' => 'Autentikasi berhasil.',
@@ -36,6 +40,9 @@ Route::middleware(['auth', 'role:siswa,guru,pembimbing_dudi,orang_tua,kepala_sek
     })->name('dashboard');
 
     Route::prefix('admin')->name('admin.')->middleware('role:admin')->group(function (): void {
+        Route::view('/dashboard', 'admin.dashboard')->name('dashboard');
+        Route::view('/kemitraan-dudi', 'admin.dudi-mou')->name('dudi-mou');
+
         Route::apiResource('dudis', DudiController::class);
 
         Route::get('/users', [UserController::class, 'index'])->name('users.index');
@@ -73,7 +80,7 @@ Route::middleware(['auth', 'role:siswa,guru,pembimbing_dudi,orang_tua,kepala_sek
     Route::prefix('siswa')->name('siswa.')->middleware('role:siswa')->group(function (): void {
         Route::view('/dashboard', 'siswa.dashboard')->name('dashboard');
         Route::view('/checkin', 'siswa.checkin')->name('checkin');
-        Route::view('/logbook', 'siswa.logbook')->name('logbook'); // <-- Diperbaiki agar rute logbook aktif
+        Route::view('/logbook', 'siswa.logbook')->name('logbook');
         Route::view('/penempatan', 'siswa.penempatan')->name('penempatan');
         Route::view('/penilaian', 'siswa.penilaian')->name('penilaian');
         Route::view('/laporan', 'siswa.laporan')->name('laporan');
