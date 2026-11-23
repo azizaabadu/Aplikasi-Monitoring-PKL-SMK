@@ -61,12 +61,12 @@
           </a>
 
           <!-- Menu Aktif: Kemitraan DUDI & MoU -->
-          <a href="dudi-mou.php" class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg bg-[#1E3F73] text-white font-bold shadow-sm">
+          <a href="{{ route('admin.dudi-mou') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg bg-[#1E3F73] text-white font-bold shadow-sm">
             <i class="fa-solid fa-building w-4 text-center text-sky-300"></i>
             <span>Kemitraan DUDI &amp; MoU</span>
           </a>
 
-          <a href="#" class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-white/5 hover:text-white transition">
+          <a href="{{ route('admin.monitoring-pembimbing') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-white/5 hover:text-white transition">
             <i class="fa-solid fa-clipboard-check w-4 text-center text-slate-400"></i>
             <span>Monitoring &amp; Pembimbing</span>
           </a>
