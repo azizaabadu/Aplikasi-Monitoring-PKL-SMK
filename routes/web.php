@@ -45,6 +45,7 @@ Route::middleware(['auth', 'role:siswa,guru,pembimbing_dudi,orang_tua,kepala_sek
         Route::view('/monitoring-pembimbing', 'admin.monitoring-pembimbing')->name('monitoring-pembimbing');
         Route::view('/manajemen-siswa', 'admin.manajemen-siswa')->name('manajemen-siswa');
         Route::view('/rekapitulasi-nilai', 'admin.rekapitulasi-nilai')->name('rekapitulasi-nilai');
+        Route::view('/pengaturan-akun', 'admin.pengaturan-akun')->name('pengaturan-akun');
 
         Route::apiResource('dudis', DudiController::class);
 

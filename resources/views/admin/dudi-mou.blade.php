@@ -71,17 +71,17 @@
             <span>Monitoring &amp; Pembimbing</span>
           </a>
 
-          <a href="{{ route('admin.rekapitulasi-nilai') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-white/5 hover:text-white transition">
+          <a href="{{ route('admin.manajemen-siswa') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-white/5 hover:text-white transition">
             <i class="fa-solid fa-user-graduate w-4 text-center text-slate-400"></i>
             <span>Manajemen Siswa &amp; Penempatan</span>
           </a>
 
-          <a href="#" class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-white/5 hover:text-white transition">
+          <a href="{{ route('admin.rekapitulasi-nilai') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-white/5 hover:text-white transition">
             <i class="fa-solid fa-award w-4 text-center text-slate-400"></i>
             <span>Rekapitulasi Nilai &amp; Sertifikat</span>
           </a>
 
-          <a href="#" class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-white/5 hover:text-white transition">
+          <a href="{{ route('admin.pengaturan-akun') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-slate-300 hover:bg-white/5 hover:text-white transition">
             <i class="fa-solid fa-gear w-4 text-center text-slate-400"></i>
             <span>Pengaturan Sekolah &amp; Akun</span>
           </a>
