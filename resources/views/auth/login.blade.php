@@ -152,7 +152,7 @@
         <div class="text-center pt-1">
           <p class="text-[11px] text-slate-500">
             Belum punya akun? 
-            <a href="#" class="font-bold text-sky-600 hover:underline">Daftar siswa baru</a>
+            <a href="{{ route('register') }}" class="font-bold text-sky-600 hover:underline">Daftar siswa baru</a>
           </p>
         </div>
 
