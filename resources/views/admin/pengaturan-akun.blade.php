@@ -384,5 +384,5 @@
     if (!simpanBobotPengaturan()) return;
     showToast('Seluruh pengaturan periode, kuota jurusan, dan bobot nilai tersimpan.');
   }
-</script>php
+</script>
 @endpush
