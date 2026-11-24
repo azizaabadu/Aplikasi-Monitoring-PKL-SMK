@@ -12,9 +12,6 @@ class DatabaseSeeder extends Seeder
 {
     use WithoutModelEvents;
 
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
         // 1. Akun Siswa
@@ -27,7 +24,17 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // 2. Akun Pembimbing DUDI
+        // 2. Akun Guru Pembimbing
+        User::updateOrCreate(
+            ['username' => 'guru1'],
+            [
+                'name'     => 'Budi Santoso, S.Pd',
+                'peran'    => 'guru',
+                'password' => Hash::make('password123'),
+            ]
+        );
+
+        // 3. Akun Pembimbing DUDI
         $pembimbingDudi = User::updateOrCreate(
             ['username' => 'dudi1'],
             [
@@ -37,7 +44,7 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // 3. Hubungkan Pembimbing DUDI ke Data Mitra
+        // 4. Data Mitra DUDI
         Dudi::updateOrCreate(
             ['user_id' => $pembimbingDudi->id],
             [
@@ -47,8 +54,18 @@ class DatabaseSeeder extends Seeder
                 'aktif'     => true,
             ]
         );
+        // 5. Akun Administrator
+        User::updateOrCreate(
+            ['username' => 'admin'],
+            [
+                'name'     => 'Administrator',
+                'peran'    => 'admin',
+                'password' => Hash::make('password123'),
+            ]
+        );
 
-        // 4. Memanggil seeder lain jika ada
-        // $this->call(DudiKuotaSeeder::class);
+
+        // Memanggil seeder lain
+        $this->call(DudiKuotaSeeder::class);
     }
 }
