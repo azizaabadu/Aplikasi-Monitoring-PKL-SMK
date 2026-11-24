@@ -104,7 +104,8 @@
                 </div>
 
                 <!-- FORM INPUT GRID -->
-                <form action="#" method="POST" class="space-y-2">
+                <form action="{{ route('register.store') }}" method="POST" class="space-y-2">
+                    @csrf
                     
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
                         <!-- NISN -->
@@ -117,7 +118,7 @@
                                 <span class="absolute left-2.5 text-slate-400">
                                     <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"/></svg>
                                 </span>
-                                <input type="text" name="nisn" value="0058291823" class="w-full pl-7 pr-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[11px] font-medium text-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-600">
+                                <input type="text" name="nisn" value="{{ old('nisn', '0058291823') }}" class="w-full pl-7 pr-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[11px] font-medium text-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-600">
                             </div>
                         </div>
 
@@ -128,25 +129,18 @@
                                 <span class="absolute left-2.5 text-slate-400">
                                     <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
                                 </span>
-                                <input type="text" name="nama" value="Rizky Pratama Wicaksono" class="w-full pl-7 pr-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[11px] font-medium text-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-600">
+                                <input type="text" name="nama" value="{{ old('nama', 'Rizky Pratama Wicaksono') }}" class="w-full pl-7 pr-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[11px] font-medium text-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-600">
                             </div>
                         </div>
 
-                        <!-- Asal Sekolah -->
+                        <!-- Asal Sekolah (Input Teks, bukan dropdown) -->
                         <div>
                             <label class="block text-[10px] font-semibold text-slate-700 mb-0.5">Asal Sekolah (SMK)</label>
                             <div class="relative flex items-center">
-                                <span class="absolute left-2.5 text-slate-400 pointer-events-none">
+                                <span class="absolute left-2.5 text-slate-400">
                                     <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
                                 </span>
-                                <select name="sekolah" class="w-full pl-7 pr-7 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[11px] font-medium text-slate-700 appearance-none focus:outline-none focus:ring-1 focus:ring-blue-600 cursor-pointer">
-                                    <option value="SMK Negeri 1 Batam" selected>SMK Negeri 1 Batam</option>
-                                    <option value="MAKN Ende">MAKN Ende</option>
-                                    <option value="SMK Negeri 1 Ende">SMK Negeri 1 Ende</option>
-                                </select>
-                                <span class="absolute right-2.5 text-slate-400 pointer-events-none">
-                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-                                </span>
+                                <input type="text" name="sekolah" value="{{ old('sekolah', 'MAKN Ende') }}" placeholder="Masukkan nama asal sekolah" class="w-full pl-7 pr-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[11px] font-medium text-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-600">
                             </div>
                         </div>
 
@@ -180,7 +174,7 @@
                                 <span class="absolute left-2.5 text-slate-400">
                                     <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
                                 </span>
-                                <input type="text" name="kelas" value="XII PPLG 1" class="w-full pl-7 pr-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[11px] font-medium text-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-600">
+                                <input type="text" name="kelas" value="{{ old('kelas', 'XII PPLG 1') }}" class="w-full pl-7 pr-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[11px] font-medium text-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-600">
                             </div>
                         </div>
 
@@ -192,7 +186,7 @@
                             </div>
                             <div class="flex">
                                 <span class="inline-flex items-center px-2 bg-slate-100 border border-r-0 border-slate-200 rounded-l-lg text-[10.5px] font-semibold text-slate-600">+62</span>
-                                <input type="text" name="no_wa" value="812-9842-1082" class="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-r-lg text-[11px] font-medium text-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-600">
+                                <input type="text" name="no_wa" value="{{ old('no_wa', '812-9842-1082') }}" class="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-r-lg text-[11px] font-medium text-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-600">
                             </div>
                         </div>
 
@@ -206,7 +200,7 @@
                                 <span class="absolute left-2.5 text-slate-400">
                                     <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"/></svg>
                                 </span>
-                                <input type="email" name="email" value="rizky.pratama@smkn1batam.sch.id" class="w-full pl-7 pr-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[11px] font-medium text-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-600">
+                                <input type="email" name="email" value="{{ old('email', 'rizky.pratama@smkn1batam.sch.id') }}" class="w-full pl-7 pr-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[11px] font-medium text-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-600">
                             </div>
                         </div>
 
