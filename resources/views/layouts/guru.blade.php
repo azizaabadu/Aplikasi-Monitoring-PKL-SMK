@@ -109,5 +109,8 @@
             </main>
         </div>
     </div>
+
+    <script src="{{ asset('js/pkl-dashboard.js') }}"></script>
+
 </body>
 </html>
