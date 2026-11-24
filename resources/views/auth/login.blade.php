@@ -18,7 +18,7 @@
     <!-- SISI KIRI: Branding & Logo Geometris PKL.ID -->
     <div class="lg:w-5/12 bg-gradient-to-br from-[#0F1E38] via-[#172B4D] to-[#1E3A6D] text-white p-6 sm:p-8 flex flex-col justify-between relative overflow-hidden">
       <div class="absolute -right-20 -top-20 w-60 h-60 bg-sky-500/10 rounded-full blur-2xl pointer-events-none"></div>
-      
+
       <!-- Header Badge -->
       <div class="relative z-10">
         <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/10 border border-white/15 text-[9px] sm:text-[10px] font-semibold tracking-wider uppercase backdrop-blur-md">
@@ -51,7 +51,7 @@
     <!-- SISI KANAN: Form Masuk -->
     <div class="lg:w-7/12 p-6 sm:p-8 lg:p-10 flex flex-col justify-center bg-white">
       <div class="max-w-sm w-full mx-auto space-y-4">
-        
+
         <!-- Judul Sambutan -->
         <div class="space-y-1">
           <div class="flex items-center gap-2.5">
@@ -69,28 +69,59 @@
           </p>
         </div>
 
-        <!-- Menampilkan Pesan Error Validasi jika ada -->
-        @if ($errors->any())
-          <div class="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-600 text-[11px] font-medium">
-            Username atau kata sandi tidak sesuai, atau akun tidak aktif.
+        @php
+          $pesanError = session('error')
+            ?? $errors->first('oauth')
+            ?? $errors->first('username')
+            ?? $errors->first('password')
+            ?? ($errors->any() ? 'Username atau kata sandi salah.' : null);
+        @endphp
+
+        @if ($pesanError)
+          <!-- Alert Merah saat username atau password salah / login gagal -->
+          <div role="alert" class="flex items-start gap-2.5 p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-[11px] font-medium leading-relaxed">
+            <svg class="w-4 h-4 text-rose-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M5.07 19h13.86c1.54 0 2.5-1.67 1.73-3L13.73 4c-.77-1.33-2.69-1.33-3.46 0L3.34 16c-.77 1.33.19 3 1.73 3z"/>
+            </svg>
+            <div>
+              <span class="font-bold block">Login Gagal</span>
+              <span>{{ $pesanError }}</span>
+            </div>
+          </div>
+        @else
+          <!-- Kotak Peringatan Masuk standar (Kuning) -->
+          <div role="note" class="flex items-start gap-2.5 p-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-[11px] font-medium leading-relaxed">
+            <svg class="w-4 h-4 text-amber-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M5.07 19h13.86c1.54 0 2.5-1.67 1.73-3L13.73 4c-.77-1.33-2.69-1.33-3.46 0L3.34 16c-.77 1.33.19 3 1.73 3z"/>
+            </svg>
+            <div>
+              <span class="font-bold block">Peringatan Masuk</span>
+              <span>Pastikan username dan kata sandi sesuai. Jika salah atau belum terdaftar, login tidak dapat diproses.</span>
+            </div>
+          </div>
+        @endif
+
+        @if (session('status'))
+          <div role="status" class="p-3 rounded-xl bg-sky-50 border border-sky-200 text-sky-700 text-[11px] font-medium">
+            {{ session('status') }}
           </div>
         @endif
 
         <!-- Form Login Terhubung ke Controller Laravel -->
         <form action="{{ route('login') }}" method="POST" class="space-y-3">
           @csrf
-          
+
           <!-- Pilihan Peran -->
           <div>
-            <label class="block text-[11px] font-bold text-slate-700 mb-1">Masuk Sebagai / Peran Akun</label>
-            <select name="peran" class="w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-xs font-semibold text-slate-800 focus:outline-none focus:border-sky-500 focus:bg-white transition">
-  <option value="siswa" {{ old('peran') == 'siswa' ? 'selected' : '' }}>Siswa SMK (Praktik Kerja Lapangan)</option>
-  <option value="guru" {{ old('peran') == 'guru' ? 'selected' : '' }}>Guru Pembimbing Sekolah</option>
-  <option value="dudi" {{ old('peran') == 'dudi' ? 'selected' : '' }}>Pembimbing Lapangan (DUDI)</option>
-  <option value="ortu" {{ old('peran') == 'ortu' ? 'selected' : '' }}>Orang Tua / Wali Siswa</option>
-  <option value="kepsek" {{ old('peran') == 'kepsek' ? 'selected' : '' }}>Kepala Sekolah</option>
-  <option value="admin" {{ old('peran') == 'admin' ? 'selected' : '' }}>Admin PKL / Tata Usaha</option>
-</select>
+            <label for="loginPeran" class="block text-[11px] font-bold text-slate-700 mb-1">Masuk Sebagai / Peran Akun</label>
+            <select id="loginPeran" name="peran" class="w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-xs font-semibold text-slate-800 focus:outline-none focus:border-sky-500 focus:bg-white transition">
+              <option value="siswa" {{ old('peran') == 'siswa' ? 'selected' : '' }}>Siswa SMK (Praktik Kerja Lapangan)</option>
+              <option value="guru" {{ old('peran') == 'guru' ? 'selected' : '' }}>Guru Pembimbing Sekolah</option>
+              <option value="dudi" {{ old('peran') == 'dudi' ? 'selected' : '' }}>Pembimbing Lapangan (DUDI)</option>
+              <option value="ortu" {{ old('peran') == 'ortu' ? 'selected' : '' }}>Orang Tua / Wali Siswa</option>
+              <option value="kepsek" {{ old('peran') == 'kepsek' ? 'selected' : '' }}>Kepala Sekolah</option>
+              <option value="admin" {{ old('peran') == 'admin' ? 'selected' : '' }}>Admin PKL / Tata Usaha</option>
+            </select>
           </div>
 
           <!-- NISN / Username -->
@@ -138,21 +169,25 @@
 
         <!-- Login Alternatif -->
         <div class="grid grid-cols-2 gap-2">
-          <button type="button" class="flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-[11px] font-bold text-slate-700 transition shadow-sm">
+          <a href="{{ route('oauth.redirect', ['provider' => 'google']) }}"
+             onclick="this.href = '{{ route('oauth.redirect', ['provider' => 'google']) }}?peran=' + encodeURIComponent(document.getElementById('loginPeran')?.value || 'siswa')"
+             class="flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-[11px] font-bold text-slate-700 transition shadow-sm">
             <svg class="w-3.5 h-3.5" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.13 0-5.78-2.11-6.73-4.96H1.18v3.15C3.15 21.32 7.23 24 12 24z"/><path fill="#FBBC05" d="M5.27 14.24c-.25-.72-.38-1.49-.38-2.24s.13-1.52.38-2.24V6.61H1.18C.43 8.13 0 9.87 0 11.7s.43 3.57 1.18 5.09l4.09-3.15z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.23 0 3.15 2.68 1.18 6.61l4.09 3.15c.95-2.85 3.6-4.96 6.73-4.96z"/></svg>
             Google
-          </button>
-          <button type="button" class="flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-[11px] font-bold text-slate-700 transition shadow-sm">
+          </a>
+          <a href="{{ route('oauth.redirect', ['provider' => 'belajarid']) }}"
+             onclick="this.href = '{{ route('oauth.redirect', ['provider' => 'belajarid']) }}?peran=' + encodeURIComponent(document.getElementById('loginPeran')?.value || 'siswa')"
+             class="flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-[11px] font-bold text-slate-700 transition shadow-sm">
             <span class="w-3.5 h-3.5 rounded-full bg-sky-600 text-white font-bold flex items-center justify-center text-[9px]">B</span>
             Belajar.id
-          </button>
+          </a>
         </div>
 
         <!-- Belum punya akun -->
         <div class="text-center pt-1">
           <p class="text-[11px] text-slate-500">
-            Belum punya akun? 
-            <a href="#" class="font-bold text-sky-600 hover:underline">Daftar siswa baru</a>
+            Belum punya akun?
+            <a href="{{ route('register') }}" class="font-bold text-sky-600 hover:underline">Daftar siswa baru</a>
           </p>
         </div>
 
