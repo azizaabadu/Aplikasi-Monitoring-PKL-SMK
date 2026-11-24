@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\DudiController;
 use App\Http\Controllers\Admin\DudiKuotaController;
+use App\Http\Controllers\Admin\MitraDudiController;
 use App\Http\Controllers\Admin\PenempatanController;
 use App\Http\Controllers\Admin\PeriodePklController;
 use App\Http\Controllers\Admin\UserController;
@@ -11,7 +12,6 @@ use App\Models\Dudi;
 use App\Models\PeriodePkl;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\MitraDudiController;
 
 Route::get('/', function () {
     return auth()->check() ? redirect()->route('dashboard') : redirect()->route('login');
@@ -26,18 +26,17 @@ Route::middleware(['auth', 'role:siswa,guru,pembimbing_dudi,orang_tua,kepala_sek
     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
     Route::get('/dashboard', function (Request $request) {
-        if ($request->user()->peran === 'siswa') {
-            return redirect()->route('siswa.dashboard');
-        }
-
-        if ($request->user()->peran === 'admin') {
-            return redirect()->route('admin.dashboard');
-        }
-
-        return response()->json([
-            'user' => $request->user()->only(['id', 'name', 'username', 'peran']),
-            'message' => 'Autentikasi berhasil.',
-        ]);
+        return match ($request->user()->peran) {
+            'siswa' => redirect()->route('siswa.dashboard'),
+            'admin' => redirect()->route('admin.dashboard'),
+            'guru' => redirect()->route('guru.dashboard'),
+            'pembimbing_dudi' => redirect()->route('dudi.dashboard'), // Diarahkan ke dashboard DUDI
+            'orang_tua' => redirect()->route('orangtua.dashboard'),
+            default => response()->json([
+                'user' => $request->user()->only(['id', 'name', 'username', 'peran']),
+                'message' => 'Autentikasi berhasil.',
+            ]),
+        };
     })->name('dashboard');
 
     Route::prefix('admin')->name('admin.')->middleware('role:admin')->group(function (): void {
@@ -77,10 +76,9 @@ Route::middleware(['auth', 'role:siswa,guru,pembimbing_dudi,orang_tua,kepala_sek
         ]))->name('dashboard');
     });
 
+    // DIUBAH: Menampilkan view Blade dashboard DUDI
     Route::prefix('dudi')->name('dudi.')->middleware('role:pembimbing_dudi')->group(function (): void {
-        Route::get('/dashboard', fn (Request $request) => response()->json([
-            'dudi' => Dudi::query()->where('user_id', $request->user()->id)->firstOrFail(),
-        ]))->name('dashboard');
+        Route::view('/dashboard', 'dudi.dashboard')->name('dashboard');
     });
 
     Route::prefix('siswa')->name('siswa.')->middleware('role:siswa')->group(function (): void {

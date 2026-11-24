@@ -2,10 +2,11 @@
 
 namespace Database\Seeders;
 
+use App\Models\Dudi;
+use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\User; // <-- Pastikan ini ada di atas
-use Illuminate\Support\Facades\Hash; // <-- Pastikan ini ada di atas
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -16,14 +17,38 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Masukkan User::create di DALAM kurung kurawal fungsi run()
-       User::create([
-    'name' => 'Rizky Pratama',
-    'username' => 'siswa2', // Ubah dari siswa1 menjadi siswa2
-    'peran' => 'siswa',
-    'password' => Hash::make('password123'),
-]);
-        // Memanggil seeder lain jika ada
-        $this->call(DudiKuotaSeeder::class);
+        // 1. Akun Siswa
+        User::updateOrCreate(
+            ['username' => 'siswa2'],
+            [
+                'name'     => 'Rizky Pratama',
+                'peran'    => 'siswa',
+                'password' => Hash::make('password123'),
+            ]
+        );
+
+        // 2. Akun Pembimbing DUDI
+        $pembimbingDudi = User::updateOrCreate(
+            ['username' => 'dudi1'],
+            [
+                'name'     => 'Ahmad Fauzi, S.Kom',
+                'peran'    => 'pembimbing_dudi',
+                'password' => Hash::make('password123'),
+            ]
+        );
+
+        // 3. Hubungkan Pembimbing DUDI ke Data Mitra
+        Dudi::updateOrCreate(
+            ['user_id' => $pembimbingDudi->id],
+            [
+                'nama_dudi' => 'PT Solusi Teknologi Nusantara',
+                'alamat'    => 'Jl. Ahmad Yani No. 45, Batam',
+                'kontak'    => '081234567890',
+                'aktif'     => true,
+            ]
+        );
+
+        // 4. Memanggil seeder lain jika ada
+        // $this->call(DudiKuotaSeeder::class);
     }
 }
