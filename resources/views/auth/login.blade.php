@@ -87,7 +87,7 @@
   <option value="siswa" {{ old('peran') == 'siswa' ? 'selected' : '' }}>Siswa SMK (Praktik Kerja Lapangan)</option>
   <option value="guru" {{ old('peran') == 'guru' ? 'selected' : '' }}>Guru Pembimbing Sekolah</option>
   <option value="dudi" {{ old('peran') == 'dudi' ? 'selected' : '' }}>Pembimbing Lapangan (DUDI)</option>
-  <option value="ortu" {{ old('peran') == 'ortu' ? 'selected' : '' }}>Orang Tua / Wali Siswa</option>
+  <option value="orang_tua" {{ old('peran') == 'orang_tua' ? 'selected' : '' }}>Orang Tua / Wali Siswa</option>
   <option value="kepsek" {{ old('peran') == 'kepsek' ? 'selected' : '' }}>Kepala Sekolah</option>
   <option value="admin" {{ old('peran') == 'admin' ? 'selected' : '' }}>Admin PKL / Tata Usaha</option>
 </select>
