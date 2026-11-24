@@ -33,9 +33,9 @@ class AuthenticatedSessionController extends Controller
         if (RateLimiter::tooManyAttempts($throttleKey, 5)) {
             $seconds = RateLimiter::availableIn($throttleKey);
 
-            return back()->withErrors([
-                'username' => "Terlalu banyak percobaan. Coba lagi dalam {$seconds} detik.",
-            ])->onlyInput('username');
+            return back()
+                ->withInput($request->only('username', 'peran', 'remember'))
+                ->with('error', "Terlalu banyak percobaan. Coba lagi dalam {$seconds} detik.");
         }
 
         // 2. Cocokkan kredensial beserta kolom peran dan status aktif di database
@@ -47,9 +47,9 @@ class AuthenticatedSessionController extends Controller
         ], $request->boolean('remember'))) {
             RateLimiter::hit($throttleKey, 60);
 
-            return back()->withErrors([
-                'username' => 'Username, kata sandi, atau peran yang dipilih tidak sesuai.',
-            ])->onlyInput('username');
+            return back()
+                ->withInput($request->only('username', 'peran', 'remember'))
+                ->with('error', 'Username atau kata sandi salah.');
         }
 
         RateLimiter::clear($throttleKey);
@@ -58,12 +58,12 @@ class AuthenticatedSessionController extends Controller
         // 3. Arahkan pengguna ke dashboard sesuai perannya masing-masing
         $user = Auth::user();
         if ($user->peran === 'admin') {
-            return redirect()->route('admin.dashboard'); // Pastikan rute ini ada di web.php
+            return redirect()->route('admin.dashboard');
         } elseif ($user->peran === 'guru') {
             return redirect()->route('guru.dashboard');
         } elseif ($user->peran === 'dudi') {
             return redirect()->route('dudi.dashboard');
-        } elseif ($user->peran === 'orang_tua') {
+        } elseif ($user->peran === 'orang_tua' || $user->peran === 'ortu') {
             return redirect()->route('orangtua.dashboard');
         }
 

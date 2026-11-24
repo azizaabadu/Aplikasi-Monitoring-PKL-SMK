@@ -74,11 +74,11 @@
             ?? $errors->first('oauth')
             ?? $errors->first('username')
             ?? $errors->first('password')
-            ?? ($errors->any() ? $errors->first() : null);
+            ?? ($errors->any() ? 'Username atau kata sandi salah.' : null);
         @endphp
 
         @if ($pesanError)
-          <!-- Tampil saat username/password salah, belum terdaftar, atau login OAuth gagal -->
+          <!-- Alert Merah saat username atau password salah / login gagal -->
           <div role="alert" class="flex items-start gap-2.5 p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-[11px] font-medium leading-relaxed">
             <svg class="w-4 h-4 text-rose-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M5.07 19h13.86c1.54 0 2.5-1.67 1.73-3L13.73 4c-.77-1.33-2.69-1.33-3.46 0L3.34 16c-.77 1.33.19 3 1.73 3z"/>
@@ -89,7 +89,7 @@
             </div>
           </div>
         @else
-          <!-- Kotak peringatan yang selalu muncul di halaman login -->
+          <!-- Kotak Peringatan Masuk standar (Kuning) -->
           <div role="note" class="flex items-start gap-2.5 p-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-[11px] font-medium leading-relaxed">
             <svg class="w-4 h-4 text-amber-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M5.07 19h13.86c1.54 0 2.5-1.67 1.73-3L13.73 4c-.77-1.33-2.69-1.33-3.46 0L3.34 16c-.77 1.33.19 3 1.73 3z"/>
