@@ -1,451 +1,613 @@
 @extends('layouts.student')
 
-@section('title', 'Laporan Akhir & Rekapitulasi PKL - Portal PKL.ID')
+@section('title', 'Laporan Akhir & Rekapitulasi PKL — PKL.ID')
 
 @section('content')
 <div class="space-y-6">
 
-  <!-- 1. HEADER & TOMBOL AKSI ATAS -->
-  <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-    <div>
-      <div class="flex items-center gap-2 text-xs text-slate-500 font-medium mb-1">
-        <span>Beranda</span>
+  <!-- Header & Tombol Aksi -->
+  <section class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+    <div class="space-y-1.5">
+      <div class="flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-wider text-slate-400">
+        <a href="{{ route('siswa.dashboard') }}" class="hover:text-slate-600"><i class="fa-solid fa-house mr-1"></i>Beranda</a>
         <span>/</span>
-        <span class="text-slate-800 font-semibold">Laporan & Rekapitulasi</span>
+        <span class="text-slate-700">Laporan & Rekapitulasi</span>
       </div>
-      <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Laporan Akhir & Rekapitulasi PKL</h1>
-      <p class="text-xs text-slate-500 mt-1">Pusat validasi berkas final, alur pengesahan bertingkat, serta penarikan rekapitulasi kumulatif siswa praktik kerja industri.</p>
-    </div>
-    <div class="flex items-center gap-2.5">
-      <button onclick="alert('Membuka panduan penyusunan laporan (Pedoman 2024)...')" class="px-4 py-2.5 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-bold rounded-xl shadow-sm transition flex items-center gap-2">
-        <i class="fa-solid fa-book text-slate-500"></i>
-        Panduan Penyusunan (Pedoman 2024)
-      </button>
-      <button onclick="alert('Membuka form unggah draf laporan baru...')" class="px-4 py-2.5 bg-[#0F1E38] hover:bg-[#1E3A6D] text-white text-xs font-bold rounded-xl shadow-sm transition flex items-center gap-2">
-        <i class="fa-solid fa-cloud-arrow-up text-sky-400"></i>
-        + Unggah Draf Laporan Baru
-      </button>
-    </div>
-  </div>
 
-  <!-- 2. WORKFLOW VALIDASI: STATUS ALUR PENGESAHAN BERKAS AKHIR (4 TAHAP) -->
-  <div class="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-sm space-y-5">
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 border-b border-slate-100">
-      <div>
-        <span class="text-[10px] font-extrabold uppercase tracking-widest text-slate-400">Workflow Validasi</span>
-        <h3 class="text-base font-extrabold text-slate-900">Status Alur Pengesahan Berkas Akhir</h3>
+      <div class="flex flex-wrap items-center gap-2.5">
+        <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">Laporan Akhir & Rekapitulasi PKL</h1>
+        <span class="px-3 py-1 rounded-full bg-sky-100 text-sky-700 text-[11px] font-extrabold">TA 2024/2025</span>
       </div>
-      <span class="px-3 py-1 rounded-full bg-sky-50 text-sky-700 border border-sky-200 text-xs font-extrabold">
-        Progses Pengesahan: Tahap 3 dari 4
+
+      <p class="text-xs text-slate-500 max-w-2xl">
+        Pusat validasi berkas final, alur pengesahan bertingkat, serta penarikan rekapitulasi kumulatif siswa praktik kerja industri.
+      </p>
+    </div>
+
+    <div class="flex flex-wrap items-center gap-2.5 self-start lg:self-center">
+      <button type="button" onclick="openLapModal('modalPanduan')" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 text-xs font-bold shadow-2xs transition">
+        <i class="fa-regular fa-file-lines text-slate-500"></i>
+        <span>Panduan Penyusunan (Pedoman 2024)</span>
+      </button>
+
+      <button type="button" onclick="openLapModal('modalUnggahDraf')" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#0F2442] hover:bg-[#193763] text-white text-xs font-bold shadow-sm transition">
+        <i class="fa-solid fa-cloud-arrow-up text-sky-300"></i>
+        <span>+ Unggah Draf Laporan Baru</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- WORKFLOW VALIDASI: STATUS ALUR PENGESAHAN BERKAS AKHIR -->
+  <section class="bg-white rounded-3xl border border-slate-200/80 p-6 shadow-sm space-y-5">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+      <div>
+        <div class="text-[10px] font-extrabold tracking-wider uppercase text-amber-500 flex items-center gap-1.5">
+          <span>Workflow Validasi</span>
+          <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+        </div>
+        <h2 class="text-base font-extrabold text-slate-900 mt-0.5">Status Alur Pengesahan Berkas Akhir</h2>
+      </div>
+      <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-700 text-[11px] font-bold self-start sm:self-auto">
+        <i class="fa-solid fa-arrow-trend-up text-indigo-500"></i>
+        <span>Progres Pengesahan: <strong id="tahapLabel">Tahap 3 dari 4</strong></span>
       </span>
     </div>
 
-    <!-- Grid 4 Tahap Validasi -->
     <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-      
-      <!-- Tahap 1: Penyusunan Bab I - V -->
-      <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-3 relative">
-        <div class="flex items-center justify-between">
-          <span class="text-[10px] font-extrabold text-slate-400 uppercase">Tahap 1</span>
-          <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-bold">✓ Selesai</span>
+      <!-- Tahap 1 -->
+      <div class="p-4 rounded-2xl bg-emerald-50/40 border border-emerald-200/80 flex flex-col justify-between space-y-4">
+        <div class="space-y-2.5">
+          <div class="flex items-center justify-between">
+            <span class="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center text-xs">
+              <i class="fa-regular fa-circle-check"></i>
+            </span>
+            <span class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-700 text-[10px] font-extrabold">• Selesai</span>
+          </div>
+          <div>
+            <div class="text-[9px] font-extrabold uppercase tracking-wider text-emerald-600">Tahap 1</div>
+            <h3 class="text-xs font-extrabold text-slate-900 mt-0.5">Penyusunan Bab I - V</h3>
+            <p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Draf naskah lengkap telah disusun dan lolos uji orisinalitas.</p>
+          </div>
         </div>
-        <div>
-          <div class="text-xs font-extrabold text-slate-900">Penyusunan Bab I - V</div>
-          <div class="text-[11px] text-slate-500 mt-0.5">Draf naskah lengkap telah disusun dan lolos uji orisinalitas.</div>
-        </div>
-        <div class="pt-2 border-t border-slate-200/60 flex items-center justify-between text-xs">
-          <span class="text-slate-500 font-medium">Kelengkapan</span>
-          <strong class="text-emerald-700 font-black">100%</strong>
-        </div>
-      </div>
-
-      <!-- Tahap 2: Bimbingan Guru -->
-      <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-3 relative">
-        <div class="flex items-center justify-between">
-          <span class="text-[10px] font-extrabold text-slate-400 uppercase">Tahap 2</span>
-          <span class="px-2 py-0.5 rounded bg-sky-100 text-sky-800 text-[10px] font-bold">● Disetujui</span>
-        </div>
-        <div>
-          <div class="text-xs font-extrabold text-slate-900">Bimbingan Guru</div>
-          <div class="text-[11px] text-slate-500 mt-0.5">Dra. Sri Wahyuni, M.Pd<br><span class="text-[10px]">NIP. 19780412 200901 2 008</span></div>
-        </div>
-        <div class="pt-2 border-t border-slate-200/60 flex items-center justify-between text-xs">
-          <span class="text-slate-500 font-medium">Status</span>
-          <strong class="text-sky-700 font-bold">Revisi 2x • Selesai 24 Okt.</strong>
+        <div class="space-y-1.5 pt-2 border-t border-emerald-200/60">
+          <div class="flex justify-between text-[10px] font-bold">
+            <span class="text-slate-500">Kelengkapan</span>
+            <span class="text-emerald-700 font-extrabold">100%</span>
+          </div>
+          <div class="w-full h-1.5 rounded-full bg-emerald-100 overflow-hidden">
+            <div class="h-full bg-emerald-500 rounded-full w-full"></div>
+          </div>
         </div>
       </div>
 
-      <!-- Tahap 3: Pengesahan DUDI (Sedang Berjalan) -->
-      <div class="p-4 rounded-2xl bg-amber-50/70 border border-amber-200 space-y-3 relative shadow-sm">
-        <div class="flex items-center justify-between">
-          <span class="text-[10px] font-extrabold text-amber-700 uppercase">Tahap 3 • Berjalan</span>
-          <span class="px-2 py-0.5 rounded bg-amber-200 text-amber-900 text-[10px] font-bold">⏳ Menunggu TTD</span>
+      <!-- Tahap 2 -->
+      <div class="p-4 rounded-2xl bg-emerald-50/40 border border-emerald-200/80 flex flex-col justify-between space-y-4">
+        <div class="space-y-2.5">
+          <div class="flex items-center justify-between">
+            <span class="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center text-xs">
+              <i class="fa-regular fa-circle-check"></i>
+            </span>
+            <span class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-700 text-[10px] font-extrabold">• Disetujui</span>
+          </div>
+          <div>
+            <div class="text-[9px] font-extrabold uppercase tracking-wider text-emerald-600">Tahap 2</div>
+            <h3 class="text-xs font-extrabold text-slate-900 mt-0.5">Bimbingan Guru</h3>
+            <p class="text-[11px] font-bold text-slate-700 mt-0.5">Dra. Sri Wahyuni, M.Pd</p>
+            <p class="text-[10px] text-slate-400">NIP. 19780412 200501 2 008</p>
+          </div>
         </div>
-        <div>
-          <div class="text-xs font-extrabold text-slate-900">Pengesahan DUDI</div>
-          <div class="text-[11px] text-slate-600 mt-0.5">Hendrawan Saputra, S.Kom<br><span class="text-[10px] text-slate-500">Lead Engineer • PT Solusi Teknologi Nusantara</span></div>
+        <div class="pt-2 border-t border-emerald-200/60 flex items-center gap-1.5 text-[10px] font-bold text-emerald-700">
+          <i class="fa-regular fa-circle-check"></i>
+          <span>Revisi 2x • Selesai 24 Okt</span>
         </div>
-        <div class="pt-2 border-t border-amber-200/80 flex items-center justify-between text-xs">
-          <button onclick="alert('Mengirim pengingat ke mentor DUDI...')" class="text-amber-800 font-bold hover:underline flex items-center gap-1">
-            <i class="fa-solid fa-paper-plane text-[10px]"></i> Kirim Pengingat
+      </div>
+
+      <!-- Tahap 3 (Berjalan) -->
+      <div class="p-4 rounded-2xl bg-indigo-50/50 border-2 border-indigo-400/70 flex flex-col justify-between space-y-4 shadow-2xs">
+        <div class="space-y-2.5">
+          <div class="flex items-center justify-between">
+            <span class="w-7 h-7 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center text-xs">
+              <i class="fa-solid fa-file-signature"></i>
+            </span>
+            <span class="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-700 text-[10px] font-extrabold">• Menunggu TTD</span>
+          </div>
+          <div>
+            <div class="text-[9px] font-extrabold uppercase tracking-wider text-indigo-600">Tahap 3 • Berjalan</div>
+            <h3 class="text-xs font-extrabold text-slate-900 mt-0.5">Pengesahan DUDI</h3>
+            <p class="text-[11px] font-bold text-slate-800 mt-0.5">Hendrawan Saputra, S.Kom</p>
+            <p class="text-[10px] text-slate-500">Lead Engineer • PT Solusi Teknologi Nusantara</p>
+          </div>
+        </div>
+        <div class="pt-2 border-t border-indigo-200/70 flex items-center justify-between gap-2 text-[10px]">
+          <button type="button" id="btnKirimPengingat" onclick="kirimPengingatDudi()" class="font-extrabold text-indigo-600 hover:text-indigo-800 flex items-center gap-1">
+            <i class="fa-regular fa-paper-plane"></i>
+            <span>Kirim Pengingat</span>
           </button>
-          <span class="text-[10px] text-slate-500">Terkirim 25 Okt</span>
+          <span id="statusPengingat" class="text-slate-400 font-medium">Terkirim 25 Okt</span>
         </div>
       </div>
 
-      <!-- Tahap 4: Sidang & Presentasi -->
-      <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-3 relative opacity-75">
-        <div class="flex items-center justify-between">
-          <span class="text-[10px] font-extrabold text-slate-400 uppercase">Tahap 4</span>
-          <span class="px-2 py-0.5 rounded bg-slate-200 text-slate-700 text-[10px] font-bold">📅 Terjadwal</span>
+      <!-- Tahap 4 -->
+      <div class="p-4 rounded-2xl bg-slate-50/80 border border-slate-200/80 flex flex-col justify-between space-y-4">
+        <div class="space-y-2.5">
+          <div class="flex items-center justify-between">
+            <span class="w-7 h-7 rounded-lg bg-slate-200/70 text-slate-500 flex items-center justify-center text-xs">
+              <i class="fa-regular fa-id-badge"></i>
+            </span>
+            <span class="px-2.5 py-0.5 rounded-full bg-slate-200/80 text-slate-600 text-[10px] font-bold">Terjadwal</span>
+          </div>
+          <div>
+            <div class="text-[9px] font-extrabold uppercase tracking-wider text-slate-400">Tahap 4</div>
+            <h3 class="text-xs font-extrabold text-slate-800 mt-0.5">Sidang & Presentasi</h3>
+            <p class="text-[11px] text-slate-500 mt-1 leading-relaxed">Ujian komprehensif di depan dewan penguji kejuruan PPLG.</p>
+          </div>
         </div>
-        <div>
-          <div class="text-xs font-extrabold text-slate-900">Sidang & Presentasi</div>
-          <div class="text-[11px] text-slate-500 mt-0.5">Ujian komprehensif di depan dewan penguji kejuruan PPLG.</div>
-        </div>
-        <div class="pt-2 border-t border-slate-200/60 flex items-center justify-center">
-          <span class="px-2.5 py-1 rounded-lg bg-white border border-slate-200 text-slate-800 text-[11px] font-extrabold shadow-sm">
-            <i class="fa-regular fa-calendar mr-1 text-sky-600"></i> 15 November 2024
+        <div class="pt-2 border-t border-slate-200/70">
+          <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-sky-50 text-sky-700 text-[10px] font-extrabold">
+            <i class="fa-regular fa-calendar"></i>
+            <span>15 November 2024</span>
           </span>
         </div>
       </div>
-
     </div>
-  </div>
+  </section>
 
-  <!-- 3. GRID TENGAH (KIRI: BERKAS LAPORAN & CATATAN GURU | KANAN: REKAPITULASI KINERJA SISWA) -->
-  <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-    
-    <!-- Bagian Kiri (7 Kolom): Berkas Laporan Terdaftar & Catatan Guru -->
-    <div class="lg:col-span-7 space-y-6">
-      
+  <!-- GRID TENGAH: BERKAS LAPORAN & LAMPIRAN (KIRI 7 COL) + REKAPITULASI KINERJA (KANAN 5 COL) -->
+  <section class="grid grid-cols-1 xl:grid-cols-12 gap-6 items-start">
+
+    <!-- KOLOM KIRI (7 COL) -->
+    <div class="xl:col-span-7 space-y-6">
+
       <!-- Berkas Laporan Terdaftar -->
-      <div class="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-sm space-y-5">
-        <div class="flex items-center justify-between pb-3 border-b border-slate-100">
-          <div>
-            <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2">
-              <i class="fa-solid fa-file-pdf text-rose-500"></i>
-              Berkas Laporan Terdaftar
-            </h3>
+      <div class="bg-white rounded-3xl border border-slate-200/80 p-6 shadow-sm space-y-5">
+        <div class="flex items-center justify-between gap-2">
+          <div class="flex items-center gap-2.5">
+            <i class="fa-regular fa-file-lines text-slate-700"></i>
+            <h2 class="text-base font-extrabold text-slate-900">Berkas Laporan Terdaftar</h2>
           </div>
-          <span class="px-2.5 py-1 rounded-full bg-sky-50 text-sky-700 border border-sky-200 text-[10px] font-extrabold">
+          <span id="badgeVersiAktif" class="px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 text-[10px] font-extrabold">
             Versi 2.1 (Revisi Akhir)
           </span>
         </div>
 
-        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/60 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div class="flex items-start gap-3.5">
-            <div class="w-12 h-14 rounded-xl bg-rose-100 text-rose-600 font-extrabold flex flex-col items-center justify-center text-xs shrink-0 shadow-sm border border-rose-200">
-              <i class="fa-solid fa-file-pdf text-xl mb-0.5"></i>
-              <span class="text-[9px]">PDF</span>
+        <!-- Kotak File PDF -->
+        <div class="p-4 rounded-2xl bg-slate-50/90 border border-slate-200/80 flex items-start gap-4">
+          <div class="w-12 h-14 rounded-xl bg-rose-50 border border-rose-200 text-rose-600 flex flex-col items-center justify-center shrink-0 font-extrabold">
+            <i class="fa-regular fa-file-pdf text-lg"></i>
+            <span class="text-[9px] mt-0.5">PDF</span>
+          </div>
+
+          <div class="min-w-0 flex-1 space-y-2">
+            <h3 id="namaFileUtama" class="text-xs sm:text-sm font-extrabold text-slate-900 truncate">
+              Laporan_PKL_RizkyPratama_PPLG_PT_Solusi_Teknologi.pdf
+            </h3>
+
+            <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-slate-500">
+              <span><i class="fa-solid fa-hard-drive mr-1 text-slate-400"></i>Ukuran: <strong id="ukuranFileUtama" class="text-slate-700">4.8 MB</strong></span>
+              <span><i class="fa-regular fa-clock mr-1 text-slate-400"></i>Diperbarui: <strong id="tglFileUtama" class="text-slate-700">25 Okt 2024, 09:30 WIB</strong></span>
             </div>
-            <div class="space-y-1">
-              <div class="text-xs font-extrabold text-slate-900">Laporan_PKL_RizkyPratama_PPLG_PT_Solusi_Teknologi.pdf</div>
-              <div class="text-[11px] text-slate-500 flex flex-wrap items-center gap-3">
-                <span>Ukuran: 4.8 MB</span>
-                <span>•</span>
-                <span>Diperbarui: 25 Okt 2024, 09:30 WIB</span>
-              </div>
-              <div class="flex items-center gap-2 pt-1 flex-wrap">
-                <span class="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
-                  <i class="fa-solid fa-shield-check"></i> Checksum Valid
-                </span>
-                <span class="inline-flex items-center gap-1 text-[10px] font-bold text-sky-700 bg-sky-50 px-2 py-0.5 rounded border border-sky-200">
-                  Siap Verifikasi Industri
-                </span>
-                <span class="text-[10px] text-slate-500">94 Halaman</span>
-                <span class="text-[10px] text-slate-400 font-mono">#PPLG-SMKN1-2024-089</span>
-              </div>
+
+            <div class="flex flex-wrap items-center gap-2 pt-0.5">
+              <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-emerald-50 text-emerald-700 text-[10px] font-bold">
+                <i class="fa-solid fa-link text-[9px]"></i> Checksum Valid
+              </span>
+              <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-emerald-50 text-emerald-700 text-[10px] font-bold">
+                ✓ Siap Verifikasi Industri
+              </span>
+              <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[10px] font-bold">
+                <i class="fa-regular fa-file text-[9px]"></i> 94 Halaman
+              </span>
+              <span class="px-2.5 py-0.5 rounded-md bg-slate-100 text-slate-600 text-[10px] font-mono font-bold">
+                # PPLG-SMKN1-2024-089
+              </span>
             </div>
           </div>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1">
-          <button onclick="alert('Membuka pratinjau dokumen PDF...')" class="py-2.5 px-3 rounded-xl bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-xs font-bold transition flex items-center justify-center gap-2 shadow-sm">
-            <i class="fa-solid fa-eye text-sky-600"></i> Lihat Pratinjau
+        <!-- 3 Tombol Aksi Berkas -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <button type="button" onclick="openLapModal('modalPratinjau')" class="py-2.5 px-3.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 text-slate-800 text-xs font-bold flex items-center justify-center gap-2 transition">
+            <i class="fa-regular fa-eye text-slate-600"></i>
+            <span>Lihat Pratinjau</span>
           </button>
-          <button onclick="alert('Mengunggah file revisi baru...')" class="py-2.5 px-3 rounded-xl bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-xs font-bold transition flex items-center justify-center gap-2 shadow-sm">
-            <i class="fa-solid fa-cloud-arrow-up text-amber-600"></i> Ganti File
+
+          <button type="button" onclick="openLapModal('modalUnggahDraf')" class="py-2.5 px-3.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 text-slate-800 text-xs font-bold flex items-center justify-center gap-2 transition">
+            <i class="fa-solid fa-rotate text-slate-600"></i>
+            <span>Ganti File</span>
           </button>
-          <button onclick="alert('Mengunduh lembar pengesahan resmi...')" class="py-2.5 px-3 rounded-xl bg-[#0F1E38] hover:bg-[#1E3A6D] text-white text-xs font-bold transition flex items-center justify-center gap-2 shadow-sm">
-            <i class="fa-solid fa-download text-sky-400"></i> Unduh Lembar Resmi
+
+          <button type="button" onclick="lapToast('Mengunduh Lembar Pengesahan Resmi PDF...')" class="py-2.5 px-3.5 rounded-xl bg-[#0F2442] hover:bg-[#193763] text-white text-xs font-bold flex items-center justify-center gap-2 shadow-sm transition">
+            <i class="fa-solid fa-download text-sky-300"></i>
+            <span>Unduh Lembar Resmi</span>
           </button>
         </div>
 
         <!-- Catatan Terakhir Guru Pembimbing -->
-        <div class="p-4 rounded-xl bg-amber-50/50 border border-amber-200/80 space-y-2 text-xs">
-          <div class="flex items-center justify-between font-bold text-slate-800">
-            <span class="text-amber-900 flex items-center gap-1.5">
-              <i class="fa-solid fa-comment-dots text-amber-600"></i> Catatan Terakhir Guru Pembimbing
+        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-2">
+          <div class="flex items-center justify-between text-[11px]">
+            <span class="font-extrabold text-slate-800 flex items-center gap-1.5">
+              <i class="fa-regular fa-comment-dots text-indigo-600"></i>
+              Catatan Terakhir Guru Pembimbing
             </span>
-            <span class="text-[10px] text-slate-400">24 Okt, 14:15 WIB</span>
+            <span class="text-slate-400">24 Okt, 14:15 WIB</span>
           </div>
-          <p class="text-slate-600 italic leading-relaxed">
+          <p class="text-xs italic text-slate-600 leading-relaxed">
             "Bab IV bagian implementasi arsitektur database PostgreSQL di DUDI sudah disempurnakan dengan baik. Format diagram UML sudah sesuai standar industri. Silakan ajukan ke Pak Hendrawan untuk tanda tangan digital lembar pengesahan."
           </p>
-          <div class="text-[10px] text-slate-400 pt-1">✍️ Dra. Sri Wahyuni, M.Pd — Pembimbing Internal SMK</div>
+          <div class="flex items-center gap-2 pt-1 text-[11px]">
+            <span class="w-5 h-5 rounded-full bg-indigo-900 text-white text-[9px] font-extrabold flex items-center justify-center">SW</span>
+            <span class="font-bold text-slate-800">Dra. Sri Wahyuni, M.Pd</span>
+            <span class="text-slate-400">— Pembimbing Internal SMK</span>
+          </div>
         </div>
       </div>
 
       <!-- Lampiran Pendukung Wajib -->
-      <div class="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-sm space-y-4">
-        <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+      <div class="bg-white rounded-3xl border border-slate-200/80 p-6 shadow-sm space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-2">
           <div>
-            <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2">
-              <i class="fa-solid fa-paperclip text-sky-600"></i>
-              Lampiran Pendukung Wajib
-            </h3>
-            <p class="text-xs text-slate-500">Komponen pelengkap portofolio sebelum pendaftaran sidang PKL.</p>
+            <h2 class="text-base font-extrabold text-slate-900 flex items-center gap-2">
+              <i class="fa-solid fa-paperclip text-slate-600 text-sm"></i>
+              <span>Lampiran Pendukung Wajib</span>
+            </h2>
+            <p class="text-[11px] text-slate-400 mt-0.5">Komponen pelengkap portofolio sebelum pendaftaran sidang PKL</p>
           </div>
-          <span class="px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 font-extrabold text-[10px] border border-emerald-200">
+          <span class="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-[11px] font-extrabold">
             3 Terunggah • Lengkap
           </span>
         </div>
 
-        <div class="space-y-2.5 text-xs">
-          <!-- Lampiran 1 -->
-          <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200/60 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-              <div class="w-9 h-9 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center shrink-0">
-                <i class="fa-solid fa-file-contract"></i>
+        <div class="divide-y divide-slate-100">
+          <div class="py-3.5 flex items-center justify-between gap-3">
+            <div class="flex items-center gap-3 min-w-0">
+              <div class="w-9 h-9 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center shrink-0">
+                <i class="fa-regular fa-file-word"></i>
               </div>
-              <div>
-                <div class="font-extrabold text-slate-900">Surat Keterangan Selesai PKL (DUDI) <span class="ml-1 px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[9px] font-bold">Terverifikasi</span></div>
-                <div class="text-[11px] text-slate-500">No. Ref: 104/HRD-STN/PKL/X/2024 • Bertanda tangan HR Director</div>
+              <div class="min-w-0">
+                <div class="flex flex-wrap items-center gap-2">
+                  <span class="text-xs font-extrabold text-slate-900 truncate">Surat Keterangan Selesai PKL (DUDI)</span>
+                  <span class="px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 text-[10px] font-bold">Terverifikasi</span>
+                </div>
+                <p class="text-[11px] text-slate-400 truncate mt-0.5">No. Ref: 104/HRD-STN/PKL/X/2024 • Bertanda tangan HR Director</p>
               </div>
             </div>
-            <button class="p-2 rounded-lg bg-white border border-slate-200 text-slate-600 hover:bg-slate-100"><i class="fa-solid fa-download"></i></button>
+            <button type="button" onclick="lapToast('Mengunduh Surat Keterangan Selesai PKL...')" class="w-8 h-8 rounded-lg hover:bg-slate-100 text-slate-500 flex items-center justify-center shrink-0">
+              <i class="fa-solid fa-download text-xs"></i>
+            </button>
           </div>
 
-          <!-- Lampiran 2 -->
-          <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200/60 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-              <div class="w-9 h-9 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center shrink-0">
-                <i class="fa-solid fa-award"></i>
+          <div class="py-3.5 flex items-center justify-between gap-3">
+            <div class="flex items-center gap-3 min-w-0">
+              <div class="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
+                <i class="fa-regular fa-file-lines"></i>
               </div>
-              <div>
-                <div class="font-extrabold text-slate-900">Lembar Penilaian Resmi Mitra Industri <span class="ml-1 px-1.5 py-0.5 rounded bg-sky-100 text-sky-800 text-[9px] font-bold">Nilai: 94.6 (A)</span></div>
-                <div class="text-[11px] text-slate-500">Format F-PKL-04 terdistribusi dari Mentor Teknis</div>
+              <div class="min-w-0">
+                <div class="flex flex-wrap items-center gap-2">
+                  <span class="text-xs font-extrabold text-slate-900 truncate">Lembar Penilaian Resmi Mitra Industri</span>
+                  <span class="px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 text-[10px] font-bold">Nilai: 94.6 (A)</span>
+                </div>
+                <p class="text-[11px] text-slate-400 truncate mt-0.5">Format F-PKL-04 terdistribusi dari Mentor Teknis</p>
               </div>
             </div>
-            <button class="p-2 rounded-lg bg-white border border-slate-200 text-slate-600 hover:bg-slate-100"><i class="fa-solid fa-download"></i></button>
+            <button type="button" onclick="lapToast('Mengunduh Lembar Penilaian Resmi Mitra Industri...')" class="w-8 h-8 rounded-lg hover:bg-slate-100 text-slate-500 flex items-center justify-center shrink-0">
+              <i class="fa-solid fa-download text-xs"></i>
+            </button>
           </div>
 
-          <!-- Lampiran 3 -->
-          <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200/60 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-              <div class="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
-                <i class="fa-solid fa-images"></i>
+          <div class="py-3.5 flex items-center justify-between gap-3">
+            <div class="flex items-center gap-3 min-w-0">
+              <div class="w-9 h-9 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center shrink-0">
+                <i class="fa-regular fa-images"></i>
               </div>
-              <div>
-                <div class="font-extrabold text-slate-900">Dokumentasi Proyek & Artefak Produk <span class="ml-1 px-1.5 py-0.5 rounded bg-slate-200 text-slate-700 text-[9px] font-bold">12 Lampiran Foto</span></div>
-                <div class="text-[11px] text-slate-500">Screencap aplikasi kasir retail, deployment server, & daily sprint</div>
+              <div class="min-w-0">
+                <div class="flex flex-wrap items-center gap-2">
+                  <span class="text-xs font-extrabold text-slate-900 truncate">Dokumentasi Proyek & Artefak Produk</span>
+                  <span class="px-2 py-0.5 rounded-md bg-purple-50 text-purple-700 text-[10px] font-bold">12 Lampiran Foto</span>
+                </div>
+                <p class="text-[11px] text-slate-400 truncate mt-0.5">Screencap aplikasi kasir retail, deployment server, & daily sprint</p>
               </div>
             </div>
-            <button class="p-2 rounded-lg bg-white border border-slate-200 text-slate-600 hover:bg-slate-100"><i class="fa-solid fa-download"></i></button>
+            <button type="button" onclick="lapToast('Mengunduh arsip 12 lampiran dokumentasi proyek...')" class="w-8 h-8 rounded-lg hover:bg-slate-100 text-slate-500 flex items-center justify-center shrink-0">
+              <i class="fa-solid fa-download text-xs"></i>
+            </button>
           </div>
         </div>
       </div>
-
     </div>
 
-    <!-- Bagian Kanan (5 Kolom): Rekapitulasi Kinerja Siswa & Bundling Berkas Cetak -->
-    <div class="lg:col-span-5 space-y-6">
-      
-      <!-- Kartu Rekapitulasi Kinerja Siswa -->
-      <div class="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-sm space-y-5">
-        <div class="flex items-center justify-between pb-3 border-b border-slate-100">
-          <h3 class="text-sm font-extrabold text-slate-900 flex items-center gap-2">
-            <i class="fa-solid fa-chart-pie text-sky-600"></i>
-            Rekapitulasi Kinerja Siswa
-          </h3>
-          <span class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-600 text-[10px] font-bold">Kumulatif Periode</span>
+    <!-- KOLOM KANAN (5 COL): REKAPITULASI KINERJA SISWA + BUNDLING + MITRA -->
+    <div class="xl:col-span-5 space-y-6">
+
+      <!-- Rekapitulasi Kinerja Siswa -->
+      <div class="bg-white rounded-3xl border border-slate-200/80 p-6 shadow-sm space-y-5">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-chart-simple text-slate-700"></i>
+            <h2 class="text-base font-extrabold text-slate-900">Rekapitulasi Kinerja Siswa</h2>
+          </div>
+          <span class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-500 text-[10px] font-bold">Kumulatif Periode</span>
         </div>
 
         <!-- Akumulasi Jam Kerja Efektif -->
-        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/60 space-y-2">
-          <div class="flex items-center justify-between">
-            <span class="text-[10px] font-bold text-slate-400 uppercase">Akumulasi Jam Kerja Efektif</span>
-            <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-extrabold">60% Target Tercapai</span>
+        <div class="p-4 rounded-2xl bg-slate-50/90 border border-slate-100 space-y-2.5">
+          <div class="flex items-start justify-between gap-2">
+            <div>
+              <div class="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">Akumulasi Jam Kerja Efektif</div>
+              <div class="text-2xl font-extrabold text-slate-900 mt-1">480 <span class="text-xs font-semibold text-slate-400">/ 800 Jam</span></div>
+            </div>
+            <span class="px-2.5 py-1 rounded-xl bg-sky-100 text-sky-700 text-[10px] font-extrabold text-center leading-tight">
+              60% Target<br>Tercapai
+            </span>
           </div>
-          <div class="flex items-baseline gap-1">
-            <span class="text-3xl font-black text-slate-900">480</span>
-            <span class="text-xs text-slate-500">/ 800 Jam</span>
+
+          <div class="w-full h-2 rounded-full bg-slate-200 overflow-hidden">
+            <div class="h-full bg-[#172B4D] rounded-full" style="width: 60%"></div>
           </div>
-          <div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
-            <div class="bg-sky-600 h-full rounded-full" style="width: 60%"></div>
-          </div>
-          <div class="flex items-center justify-between text-[10px] text-slate-500 pt-1">
-            <span>Sisa: 320 Jam (8 Pekan Operasional)</span>
-            <span class="font-bold text-slate-700">Standar Ditjen Vokasi</span>
+
+          <div class="flex items-center justify-between text-[10px] pt-0.5">
+            <span class="text-slate-400">Sisa: 320 Jam (8 Pekan Operasional)</span>
+            <span class="font-extrabold text-slate-800">Standar Ditjen Vokasi</span>
           </div>
         </div>
 
         <!-- Grid Presensi & Logbook Harian -->
-        <div class="grid grid-cols-2 gap-3 text-xs">
-          <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200/60 space-y-2">
-            <div class="flex items-center justify-between font-bold text-slate-800">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+          <div class="p-4 rounded-2xl bg-slate-50/80 border border-slate-100 space-y-2.5 text-[11px]">
+            <div class="flex items-center justify-between text-[10px] font-extrabold uppercase text-slate-400">
               <span>Presensi</span>
-              <i class="fa-solid fa-calendar-check text-emerald-600"></i>
+              <i class="fa-solid fa-shield-check text-emerald-500 text-xs"></i>
             </div>
-            <div class="text-xl font-black text-slate-900">59 <span class="text-[11px] font-normal text-slate-500">Hari Hadir</span></div>
-            <div class="space-y-0.5 text-[10px] text-slate-500 pt-1 border-t border-slate-200/60">
-              <div class="flex justify-between"><span>Tepat Waktu:</span><strong class="text-slate-800">58 hari</strong></div>
-              <div class="flex justify-between"><span>Terlambat:</span><strong class="text-amber-600">1 hari</strong></div>
-              <div class="flex justify-between"><span>Tanpa:</span><strong class="text-slate-800">0</strong></div>
-              <div class="flex justify-between"><span>Keterangan:</span><strong class="text-emerald-600">(Nihil)</strong></div>
+            <div>
+              <div class="text-2xl font-extrabold text-slate-900">59</div>
+              <div class="text-slate-400">Hari Hadir Terekam</div>
+            </div>
+            <div class="space-y-1 pt-2 border-t border-slate-200/70">
+              <div class="flex justify-between"><span class="text-slate-500">Tepat Waktu:</span><span class="font-extrabold text-emerald-600">56 hari</span></div>
+              <div class="flex justify-between"><span class="text-slate-500">Terlambat:</span><span class="font-extrabold text-amber-500">1 hari</span></div>
+              <div class="flex justify-between"><span class="text-slate-500">Tanpa Keterangan:</span><span class="font-extrabold text-emerald-600">0 (Nihil)</span></div>
             </div>
           </div>
 
-          <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200/60 space-y-2">
-            <div class="flex items-center justify-between font-bold text-slate-800">
+          <div class="p-4 rounded-2xl bg-slate-50/80 border border-slate-100 space-y-2.5 text-[11px]">
+            <div class="flex items-center justify-between text-[10px] font-extrabold uppercase text-slate-400">
               <span>Logbook Harian</span>
-              <i class="fa-solid fa-book-open text-sky-600"></i>
-            </div>
-            <div class="text-xl font-black text-slate-900">59 / 59 <span class="text-[10px] font-normal text-slate-500">Disetujui</span></div>
-            <div class="space-y-0.5 text-[10px] text-slate-500 pt-1 border-t border-slate-200/60">
-              <div class="flex justify-between"><span>Revisi:</span><strong class="text-slate-800">2</strong></div>
-              <div class="flex justify-between"><span>Logbook:</span><strong class="text-slate-800">di-diskusikan</strong></div>
-              <div class="flex justify-between"><span>Lampiran Foto:</span><strong class="text-sky-700 font-bold">12 berkas</strong></div>
-              <div class="flex justify-between"><span>Rata Nilai:</span><strong class="text-emerald-600 font-bold">95.4 /</strong></div>
-              <div class="flex justify-between"><span>Harian:</span><strong class="text-slate-800">100</strong></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Kartu Bundling Berkas Cetak -->
-        <div class="p-4 rounded-xl bg-sky-900 text-white space-y-3 shadow-md">
-          <div class="flex items-start gap-3">
-            <div class="w-10 h-10 rounded-xl bg-sky-500/20 text-sky-300 flex items-center justify-center shrink-0 border border-sky-400/30">
-              <i class="fa-solid fa-print text-lg"></i>
+              <i class="fa-regular fa-file-lines text-slate-500 text-xs"></i>
             </div>
             <div>
-              <div class="text-xs font-extrabold text-white">Bundling Berkas Cetak</div>
-              <p class="text-[11px] text-slate-300 mt-0.5 leading-snug">
-                Satukan naskah laporan, lembar pengesahan resmi, logbook lengkap, dan lembar nilai ke dalam 1 file PDF berstandar cetak offset / hard-cover.
-              </p>
+              <div class="text-2xl font-extrabold text-slate-900">59 <span class="text-xs font-semibold text-slate-400">/ 59</span></div>
+              <div class="text-slate-400">Jurnal Disetujui</div>
+            </div>
+            <div class="space-y-1 pt-2 border-t border-slate-200/70">
+              <div class="flex justify-between"><span class="text-slate-500">Revisi:</span><span class="font-extrabold text-slate-800">3</span></div>
+              <div class="flex justify-between"><span class="text-slate-500">Logbook:</span><span class="font-extrabold text-slate-800">dituntaskan</span></div>
+              <div class="flex justify-between"><span class="text-slate-500">Lampiran Foto:</span><span class="font-extrabold text-sky-600">12 berkas</span></div>
+              <div class="flex justify-between"><span class="text-slate-500">Rata Nilai:</span><span class="font-extrabold text-emerald-600">95.4 / 100</span></div>
             </div>
           </div>
-          <button onclick="alert('Mencetak buku laporan lengkap format PDF...')" class="w-full py-2.5 rounded-xl bg-sky-400 hover:bg-sky-300 text-slate-950 font-extrabold text-xs transition flex items-center justify-center gap-2 shadow">
-            <i class="fa-solid fa-file-arrow-down"></i> Cetak Buku Laporan Lengkap (PDF)
-          </button>
-          <div class="text-[10px] text-slate-400 text-center">Sesuai format Baku Kurikulum Merdeka. Perkiraan: ~14.2 MB</div>
         </div>
 
-        <!-- Mitra Industri Penyelenggara -->
-        <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200/60 flex items-center justify-between text-xs">
+        <!-- Card Bundling Berkas Cetak (Biru Gelap) -->
+        <div class="rounded-2xl bg-gradient-to-br from-[#0F2442] to-[#1A3B68] text-white p-5 space-y-3.5 shadow-md">
           <div class="flex items-center gap-2.5">
-            <div class="w-8 h-8 rounded-lg bg-slate-200 text-slate-700 flex items-center justify-center font-bold">
-              <i class="fa-solid fa-building"></i>
+            <div class="w-8 h-8 rounded-lg bg-white/10 text-sky-300 flex items-center justify-center shrink-0">
+              <i class="fa-solid fa-layer-group text-xs"></i>
             </div>
-            <div>
-              <div class="text-[10px] font-bold text-slate-400 uppercase">Mitra Industri Penyelenggara</div>
-              <div class="font-extrabold text-slate-900">PT Solusi Teknologi Nusantara</div>
-              <div class="text-[10px] text-slate-500">Batam Digital Park, Nongsa, Kota Batam</div>
-            </div>
+            <h3 class="text-sm font-extrabold">Bundling Berkas Cetak</h3>
           </div>
-          <i class="fa-solid fa-circle-check text-sky-600" title="Terverifikasi"></i>
+
+          <p class="text-[11px] text-slate-200/90 leading-relaxed">
+            Satukan naskah laporan, lembar pengesahan resmi, logbook lengkap, dan lembar nilai ke dalam 1 file PDF berstandar cetak offset / hard-cover.
+          </p>
+
+          <button type="button" onclick="lapToast('Menyiapkan paket bundling PDF (~14.2 MB)...')" class="w-full py-3 px-4 rounded-xl bg-sky-100 hover:bg-white text-[#0F2442] font-extrabold text-xs flex items-center justify-center gap-2 shadow-sm transition">
+            <i class="fa-solid fa-download"></i>
+            <span>Cetak Buku Laporan Lengkap (PDF)</span>
+          </button>
+
+          <div class="text-center text-[10px] text-slate-300/80">
+            Sesuai Format Buku Kurikulum Merdeka • Perkiraan ± 14.2 MB
+          </div>
         </div>
-
       </div>
 
+      <!-- Mitra Industri Penyelenggara -->
+      <div class="bg-white rounded-3xl border border-slate-200/80 p-5 shadow-sm flex items-center justify-between gap-3">
+        <div class="flex items-center gap-3 min-w-0">
+          <div class="w-10 h-10 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center shrink-0">
+            <i class="fa-regular fa-building"></i>
+          </div>
+          <div class="min-w-0">
+            <div class="text-[9px] font-extrabold uppercase tracking-wider text-slate-400">Mitra Industri Penyelenggara</div>
+            <div class="text-xs font-extrabold text-slate-900 truncate mt-0.5">PT Solusi Teknologi Nusantara</div>
+            <div class="text-[10px] text-slate-400 truncate">Batam Digital Park, Nongsa, Kota Batam</div>
+          </div>
+        </div>
+        <i class="fa-solid fa-circle-check text-emerald-500 text-sm shrink-0"></i>
+      </div>
     </div>
+  </section>
 
-  </div>
-
-  <!-- 4. TABEL RIWAYAT REVISI & DRAF UNGGAHAN -->
-  <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
-    
-    <!-- Header Tabel -->
-    <div class="p-6 border-b border-slate-100 flex items-center justify-between">
+  <!-- RIWAYAT REVISI & DRAF UNGGAHAN -->
+  <section class="bg-white rounded-3xl border border-slate-200/80 p-6 shadow-sm space-y-4">
+    <div class="flex items-center justify-between gap-2">
       <div>
-        <h3 class="text-base font-extrabold text-slate-900 flex items-center gap-2">
-          <i class="fa-solid fa-clock-rotate-left text-sky-600"></i>
-          Riwayat Revisi & Draf Unggahan
-        </h3>
-        <p class="text-xs text-slate-500 mt-0.5">Audit trail perubahan dokumen laporan akhir PKL siswa yang tercatat oleh sistem.</p>
+        <h2 class="text-base font-extrabold text-slate-900">Riwayat Revisi & Draf Unggahan</h2>
+        <p class="text-[11px] text-slate-400 mt-0.5">Audit trail perubahan dokumen laporan akhir PKL siswa yang tercatat oleh sistem.</p>
       </div>
-      <span class="text-xs font-bold text-slate-500 bg-slate-100 px-3 py-1.5 rounded-xl border border-slate-200">
-        Total: 3 Versi Berkas
-      </span>
+      <span id="totalVersiLabel" class="text-xs font-semibold text-slate-500">Total: 3 Versi Berkas</span>
     </div>
 
-    <!-- Tabel Data Riwayat -->
     <div class="overflow-x-auto">
-      <table class="w-full text-left border-collapse text-xs">
+      <table class="w-full text-left border-collapse">
         <thead>
-          <tr class="bg-slate-50/70 border-b border-slate-200/80 text-[11px] font-extrabold text-slate-500 uppercase tracking-wider">
-            <th class="py-3.5 px-6">Versi</th>
-            <th class="py-3.5 px-4">Nama File</th>
-            <th class="py-3.5 px-4">Tanggal Diunggah</th>
-            <th class="py-3.5 px-4">Ukuran</th>
-            <th class="py-3.5 px-4">Status Telaah</th>
-            <th class="py-3.5 px-6 text-right">Aksi</th>
+          <tr class="border-b border-slate-100 text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">
+            <th class="py-3 pr-4">Versi</th>
+            <th class="py-3 px-3">Nama File</th>
+            <th class="py-3 px-3">Tanggal Diunggah</th>
+            <th class="py-3 px-3">Ukuran</th>
+            <th class="py-3 px-3">Status Telaah</th>
+            <th class="py-3 pl-3 text-right">Aksi</th>
           </tr>
         </thead>
-        <tbody class="divide-y divide-slate-100 font-medium text-slate-700">
-          
-          <!-- Baris 1: v2.1 -->
-          <tr class="hover:bg-slate-50/50 transition">
-            <td class="py-4 px-6 font-bold text-slate-900">
-              v2.1 <span class="block text-[10px] font-extrabold text-emerald-600">(Final)</span>
-            </td>
-            <td class="py-4 px-4 font-bold text-slate-800">
-              Laporan_PKL_RizkyPratama_PPLG_PT_Solusi_Teknologi.pdf
-            </td>
-            <td class="py-4 px-4 text-slate-600">25 Okt 2024, 09:30</td>
-            <td class="py-4 px-4 text-slate-600">4.8 MB</td>
-            <td class="py-4 px-4">
-              <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-extrabold bg-amber-50 text-amber-800 border border-amber-200">
-                ● Menunggu TTD Industri
+        <tbody id="tabelVersiBody" class="divide-y divide-slate-100 text-xs">
+          <tr class="hover:bg-slate-50/80">
+            <td class="py-4 pr-4 whitespace-nowrap"><div class="font-extrabold text-slate-900">v2.1</div><div class="text-[10px] text-slate-400">(Final)</div></td>
+            <td class="py-4 px-3 font-bold text-slate-800">Laporan_PKL_RizkyPratama_PPLG_PT_Solusi_Teknologi.pdf</td>
+            <td class="py-4 px-3 whitespace-nowrap text-slate-500">25 Okt 2024, 09:30</td>
+            <td class="py-4 px-3 whitespace-nowrap text-slate-600">4.8 MB</td>
+            <td class="py-4 px-3 whitespace-nowrap">
+              <span class="inline-block px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 text-[10px] font-extrabold leading-tight text-center">
+                • Menunggu<br>TTD Industri
               </span>
             </td>
-            <td class="py-4 px-6 text-right">
-              <button onclick="alert('Mengunduh versi v2.1...')" class="text-sky-600 hover:underline font-bold">Unduh</button>
+            <td class="py-4 pl-3 text-right whitespace-nowrap">
+              <button type="button" onclick="lapToast('Mengunduh Laporan_PKL_RizkyPratama_PPLG_PT_Solusi_Teknologi.pdf')" class="font-bold text-sky-600 hover:underline">Unduh</button>
             </td>
           </tr>
 
-          <!-- Baris 2: v2.0 -->
-          <tr class="hover:bg-slate-50/50 transition">
-            <td class="py-4 px-6 font-bold text-slate-900">v2.0</td>
-            <td class="py-4 px-4 font-medium text-slate-700">
-              Laporan_PKL_RizkyPratama_Revisi1.pdf
-            </td>
-            <td class="py-4 px-4 text-slate-600">23 Okt 2024, 16:40</td>
-            <td class="py-4 px-4 text-slate-600">4.5 MB</td>
-            <td class="py-4 px-4">
-              <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-extrabold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                ● Revisi Diterima Guru
+          <tr class="hover:bg-slate-50/80">
+            <td class="py-4 pr-4 whitespace-nowrap font-bold text-slate-700">v2.0</td>
+            <td class="py-4 px-3 text-slate-600">Laporan_PKL_RizkyPratama_Revisi2.pdf</td>
+            <td class="py-4 px-3 whitespace-nowrap text-slate-500">23 Okt 2024, 16:40</td>
+            <td class="py-4 px-3 whitespace-nowrap text-slate-600">4.5 MB</td>
+            <td class="py-4 px-3 whitespace-nowrap">
+              <span class="inline-block px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-bold leading-tight text-center">
+                Revisi<br>Diterima Guru
               </span>
             </td>
-            <td class="py-4 px-6 text-right">
-              <button onclick="alert('Mengarsip file v2.0...')" class="text-slate-400 hover:text-slate-600 font-semibold">Arsip</button>
-            </td>
+            <td class="py-4 pl-3 text-right whitespace-nowrap text-slate-400 font-semibold">Arsip</td>
           </tr>
 
-          <!-- Baris 3: v1.0 -->
-          <tr class="hover:bg-slate-50/50 transition">
-            <td class="py-4 px-6 font-bold text-slate-900">v1.0 <span class="block text-[10px] font-normal text-slate-500">(Draf Awal)</span></td>
-            <td class="py-4 px-4 font-medium text-slate-700">
-              Draf_Awal_Laporan_PKL_Rizky.pdf
-            </td>
-            <td class="py-4 px-4 text-slate-600">18 Okt 2024, 11:12</td>
-            <td class="py-4 px-4 text-slate-600">3.9 MB</td>
-            <td class="py-4 px-4">
-              <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-extrabold bg-rose-50 text-rose-700 border border-rose-200">
-                ● Diperbaiki (2 Catatan)
+          <tr class="hover:bg-slate-50/80">
+            <td class="py-4 pr-4 whitespace-nowrap"><div class="font-bold text-slate-700">v1.0</div><div class="text-[10px] text-slate-400">(Draf Awal)</div></td>
+            <td class="py-4 px-3 text-slate-600">Draf_Awal_Laporan_PKL_Rizky.pdf</td>
+            <td class="py-4 px-3 whitespace-nowrap text-slate-500">18 Okt 2024, 11:12</td>
+            <td class="py-4 px-3 whitespace-nowrap text-slate-600">3.9 MB</td>
+            <td class="py-4 px-3 whitespace-nowrap">
+              <span class="inline-block px-2.5 py-1 rounded-full bg-indigo-50 text-indigo-700 text-[10px] font-bold leading-tight text-center">
+                Diperbaiki<br>(2 Catatan)
               </span>
             </td>
-            <td class="py-4 px-6 text-right">
-              <button onclick="alert('Mengarsip file v1.0...')" class="text-slate-400 hover:text-slate-600 font-semibold">Arsip</button>
-            </td>
+            <td class="py-4 pl-3 text-right whitespace-nowrap text-slate-400 font-semibold">Arsip</td>
           </tr>
-
         </tbody>
       </table>
     </div>
+  </section>
 
+  <!-- Modal Unggah Draf Laporan Baru -->
+  <div id="modalUnggahDraf" class="hidden fixed inset-0 bg-slate-900/50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-200 space-y-4">
+      <div class="flex items-center justify-between">
+        <h3 class="text-base font-extrabold text-slate-900">Unggah Draf Laporan Baru</h3>
+        <button type="button" onclick="closeLapModal('modalUnggahDraf')" class="text-slate-400 hover:text-slate-700 font-bold">✕</button>
+      </div>
+      <form onsubmit="tambahVersiLaporan(event)" class="space-y-3 text-xs">
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Nomor Versi</label>
+          <input type="text" id="versiBaru" value="v2.2 (Revisi Final)" required class="w-full rounded-xl border border-slate-300 px-3 py-2.5 font-semibold" />
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Nama File PDF</label>
+          <input type="text" id="fileBaru" value="Laporan_PKL_RizkyPratama_v2.2.pdf" required class="w-full rounded-xl border border-slate-300 px-3 py-2.5" />
+        </div>
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">Catatan Perubahan</label>
+          <textarea rows="2" required placeholder="Ringkasan bagian yang diperbarui..." class="w-full rounded-xl border border-slate-300 px-3 py-2.5"></textarea>
+        </div>
+        <div class="flex justify-end gap-2 pt-2">
+          <button type="button" onclick="closeLapModal('modalUnggahDraf')" class="px-4 py-2.5 rounded-xl bg-slate-100 text-slate-700 font-bold">Batal</button>
+          <button type="submit" class="px-4 py-2.5 rounded-xl bg-[#0F2442] text-white font-bold">Simpan Versi</button>
+        </div>
+      </form>
+    </div>
   </div>
 
+  <!-- Modal Pratinjau & Panduan -->
+  <div id="modalPratinjau" class="hidden fixed inset-0 bg-slate-900/50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 space-y-4">
+      <div class="flex items-center justify-between">
+        <h3 class="text-base font-extrabold text-slate-900">Pratinjau Dokumen Laporan Akhir</h3>
+        <button type="button" onclick="closeLapModal('modalPratinjau')" class="text-slate-400 hover:text-slate-700 font-bold">✕</button>
+      </div>
+      <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-xs space-y-2">
+        <div class="font-extrabold text-slate-800">BAB IV — IMPLEMENTASI SISTEM & PENGUJIAN DI DUDI</div>
+        <p class="text-slate-600 leading-relaxed">
+          Perancangan skema relasional PostgreSQL, autentikasi JWT, serta dokumentasi alur kerja tim pengembangan di PT Solusi Teknologi Nusantara.
+        </p>
+      </div>
+      <div class="flex justify-end">
+        <button type="button" onclick="closeLapModal('modalPratinjau')" class="px-4 py-2 rounded-xl bg-[#0F2442] text-white text-xs font-bold">Tutup</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modalPanduan" class="hidden fixed inset-0 bg-slate-900/50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-200 space-y-4">
+      <div class="flex items-center justify-between">
+        <h3 class="text-base font-extrabold text-slate-900">Pedoman Penyusunan Laporan PKL 2024</h3>
+        <button type="button" onclick="closeLapModal('modalPanduan')" class="text-slate-400 hover:text-slate-700 font-bold">✕</button>
+      </div>
+      <ul class="text-xs text-slate-600 space-y-2 list-disc pl-4">
+        <li>Format berkas wajib PDF dengan ukuran maksimal 25 MB.</li>
+        <li>Sertakan lembar persetujuan pembimbing sekolah dan mentor DUDI.</li>
+        <li>Lampirkan rekap logbook aktivitas harian yang telah divalidasi.</li>
+      </ul>
+      <div class="flex justify-end">
+        <button type="button" onclick="closeLapModal('modalPanduan')" class="px-4 py-2 rounded-xl bg-[#0F2442] text-white text-xs font-bold">Mengerti</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="lapToast" class="hidden fixed bottom-5 right-5 z-50 bg-[#0F2442] text-white px-4 py-3 rounded-2xl shadow-xl text-xs font-semibold">
+    <span id="lapToastText"></span>
+  </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+  function openLapModal(id) { document.getElementById(id).classList.remove('hidden'); }
+  function closeLapModal(id) { document.getElementById(id).classList.add('hidden'); }
+
+  function kirimPengingatDudi() {
+    document.getElementById('statusPengingat').textContent = 'Terkirim barusan';
+    document.getElementById('statusPengingat').className = 'text-emerald-600 font-bold';
+    lapToast('Pengingat tanda tangan digital dikirim ke Hendrawan Saputra, S.Kom.');
+  }
+
+  function tambahVersiLaporan(e) {
+    e.preventDefault();
+    const versi = document.getElementById('versiBaru').value;
+    const namaFile = document.getElementById('fileBaru').value;
+
+    document.getElementById('namaFileUtama').textContent = namaFile;
+    document.getElementById('badgeVersiAktif').textContent = versi;
+
+    const tbody = document.getElementById('tabelVersiBody');
+    const tr = document.createElement('tr');
+    tr.className = 'bg-sky-50/40 hover:bg-slate-50/80';
+    tr.innerHTML = `
+      <td class="py-4 pr-4 whitespace-nowrap font-extrabold text-slate-900">${versi}</td>
+      <td class="py-4 px-3 font-bold text-slate-800">${namaFile}</td>
+      <td class="py-4 px-3 whitespace-nowrap text-emerald-600 font-semibold">Baru saja</td>
+      <td class="py-4 px-3 whitespace-nowrap text-slate-600">5.0 MB</td>
+      <td class="py-4 px-3 whitespace-nowrap"><span class="px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 text-[10px] font-extrabold">• Menunggu Telaah</span></td>
+      <td class="py-4 pl-3 text-right whitespace-nowrap"><button type="button" onclick="lapToast('Mengunduh ${namaFile}')" class="font-bold text-sky-600 hover:underline">Unduh</button></td>
+    `;
+    tbody.prepend(tr);
+
+    e.target.reset();
+    closeLapModal('modalUnggahDraf');
+    lapToast(`Versi ${versi} berhasil diunggah ke riwayat laporan.`);
+  }
+
+  function lapToast(msg) {
+    const el = document.getElementById('lapToast');
+    document.getElementById('lapToastText').textContent = msg;
+    el.classList.remove('hidden');
+    clearTimeout(window._lt);
+    window._lt = setTimeout(() => el.classList.add('hidden'), 3000);
+  }
+</script>
+@endpush

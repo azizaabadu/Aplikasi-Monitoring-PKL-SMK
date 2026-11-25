@@ -10,6 +10,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\SocialLoginController;
 use App\Http\Controllers\Siswa\PilihanMitraController;
+use App\Http\Controllers\OrangTua\DashboardController as OrangTuaDashboardController;
 use App\Models\Dudi;
 use App\Models\PeriodePkl;
 use Illuminate\Http\Request;
@@ -83,7 +84,7 @@ Route::middleware(['auth', 'role:siswa,guru,pembimbing_dudi,orang_tua,kepala_sek
             ->name('penempatan.store');
     });
 
-    // RUTE LENGKAP DASHBOARD & MENU GURU PEMBIMBING
+    // RUTE DASHBOARD & MENU GURU PEMBIMBING
     Route::prefix('guru')->name('guru.')->middleware('role:guru')->group(function (): void {
         Route::view('/dashboard', 'guru.dashboard')->name('dashboard');
         Route::view('/presensi', 'guru.presensi')->name('presensi');
@@ -99,6 +100,7 @@ Route::middleware(['auth', 'role:siswa,guru,pembimbing_dudi,orang_tua,kepala_sek
         Route::view('/dashboard', 'dudi.dashboard')->name('dashboard');
     });
 
+    // RUTE DASHBOARD SISWA
     Route::prefix('siswa')->name('siswa.')->middleware('role:siswa')->group(function (): void {
         Route::view('/dashboard', 'siswa.dashboard')->name('dashboard');
         Route::view('/checkin', 'siswa.checkin')->name('checkin');
@@ -127,9 +129,14 @@ Route::middleware(['auth', 'role:siswa,guru,pembimbing_dudi,orang_tua,kepala_sek
         })->name('dudis.index');
     });
 
+    // RUTE DASHBOARD ORANG TUA
     Route::prefix('orangtua')->name('orangtua.')->middleware('role:orang_tua')->group(function (): void {
-        Route::get('/dashboard', fn (Request $request) => response()->json([
-            'anak' => $request->user()->orangTua()->with('siswa')->firstOrFail()->siswa,
-        ]))->name('dashboard');
+        Route::get('/dashboard', [OrangTuaDashboardController::class, 'index'])->name('dashboard');
+        Route::get('/kehadiran', [OrangTuaDashboardController::class, 'kehadiran'])->name('kehadiran');
+        Route::get('/logbook', [OrangTuaDashboardController::class, 'logbook'])->name('logbook');
+        Route::get('/penilaian', [OrangTuaDashboardController::class, 'penilaian'])->name('penilaian');
+        Route::get('/mitra', [OrangTuaDashboardController::class, 'mitra'])->name('mitra');
+        Route::get('/pengaturan', [OrangTuaDashboardController::class, 'pengaturan'])->name('pengaturan');
+        Route::post('/pengaturan/password', [OrangTuaDashboardController::class, 'updatePassword'])->name('pengaturan.password');
     });
 });
