@@ -51,6 +51,18 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
+        // 3b. Kepala Sekolah (PRD T6, 5.8)
+        User::firstOrCreate(
+            ['username' => 'kepsek1'],
+            [
+                'name' => 'Drs. H. Sudirman, M.Pd',
+                'email' => 'kepala.sekolah@smkn1batam.sch.id',
+                'peran' => 'kepala_sekolah',
+                'password' => Hash::make('password123'),
+                'aktif' => true,
+            ]
+        );
+
         // 4. Guru Pembimbing
         $userGuru = User::firstOrCreate(
             ['username' => 'guru1'],

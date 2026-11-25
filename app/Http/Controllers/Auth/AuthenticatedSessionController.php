@@ -27,11 +27,18 @@ class AuthenticatedSessionController extends Controller
             'peran'    => [
                 'required',
                 'string',
-                Rule::in(['admin', 'guru', 'pembimbing_dudi', 'dudi', 'orang_tua', 'ortu', 'siswa']),
+                Rule::in(['admin', 'guru', 'pembimbing_dudi', 'dudi', 'orang_tua', 'ortu', 'siswa', 'kepsek', 'kepala_sekolah']),
             ],
         ]);
 
         $peranDipilih = strtolower(trim($credentials['peran']));
+        if ($peranDipilih === 'dudi') {
+            $peranDipilih = 'pembimbing_dudi';
+        } elseif ($peranDipilih === 'ortu') {
+            $peranDipilih = 'orang_tua';
+        } elseif ($peranDipilih === 'kepsek') {
+            $peranDipilih = 'kepala_sekolah';
+        }
 
         $throttleKey = Str::transliterate(
             Str::lower($credentials['username'].'|'.$request->ip())
@@ -74,6 +81,8 @@ class AuthenticatedSessionController extends Controller
             return redirect()->route('dudi.dashboard');
         } elseif (in_array($peranUser, ['orang_tua', 'ortu'], true)) {
             return redirect()->route('orangtua.dashboard');
+        } elseif (in_array($peranUser, ['kepsek', 'kepala_sekolah'], true)) {
+            return redirect()->route('kepsek.dashboard');
         }
 
         return redirect()->route('siswa.dashboard');

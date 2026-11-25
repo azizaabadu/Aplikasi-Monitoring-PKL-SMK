@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\SocialLoginController;
+use App\Http\Controllers\Kepsek\DashboardController as KepsekDashboardController;
 use App\Http\Controllers\OrangTua\DashboardController as OrangTuaDashboardController;
 use App\Http\Controllers\Siswa\CheckinController as SiswaCheckinController;
 use App\Http\Controllers\Siswa\DashboardController as SiswaDashboardController;
@@ -145,5 +146,17 @@ Route::middleware(['auth', 'role:siswa,guru,pembimbing_dudi,orang_tua,kepala_sek
         Route::get('/mitra', [OrangTuaDashboardController::class, 'mitra'])->name('mitra');
         Route::get('/pengaturan', [OrangTuaDashboardController::class, 'pengaturan'])->name('pengaturan');
         Route::post('/pengaturan/password', [OrangTuaDashboardController::class, 'updatePassword'])->name('pengaturan.password');
+    });
+
+    // RUTE DASHBOARD KEPALA SEKOLAH (PRD T6, 5.8)
+    Route::prefix('kepsek')->name('kepsek.')->middleware('role:kepala_sekolah,kepsek')->group(function (): void {
+        Route::get('/dashboard', [KepsekDashboardController::class, 'dashboard'])->name('dashboard');
+        Route::get('/penempatan', [KepsekDashboardController::class, 'penempatan'])->name('penempatan');
+        Route::post('/penempatan/setujui', [KepsekDashboardController::class, 'setujuiPenempatan'])->name('penempatan.setujui');
+        Route::get('/monitoring', [KepsekDashboardController::class, 'monitoring'])->name('monitoring');
+        Route::get('/penilaian', [KepsekDashboardController::class, 'penilaian'])->name('penilaian');
+        Route::get('/mitra', [KepsekDashboardController::class, 'mitra'])->name('mitra');
+        Route::get('/pengaturan', [KepsekDashboardController::class, 'pengaturan'])->name('pengaturan');
+        Route::post('/pengaturan/password', [KepsekDashboardController::class, 'updatePassword'])->name('pengaturan.password');
     });
 });
