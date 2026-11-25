@@ -78,10 +78,7 @@
         @endphp
 
         @if ($pesanError)
-        <!-- feature/member-1-backend -->
           <!-- Alert Merah saat login gagal -->
-          <!-- Alert Merah saat username atau password salah / login gagal -->
-          <!-- main -->
           <div role="alert" class="flex items-start gap-2.5 p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-[11px] font-medium leading-relaxed">
             <svg class="w-4 h-4 text-rose-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M5.07 19h13.86c1.54 0 2.5-1.67 1.73-3L13.73 4c-.77-1.33-2.69-1.33-3.46 0L3.34 16c-.77 1.33.19 3 1.73 3z"/>
@@ -113,22 +110,14 @@
         <!-- Form Login Terhubung ke Controller Laravel -->
         <form action="{{ route('login') }}" method="POST" class="space-y-3">
           @csrf
-
-    <!-- feature/member-1-backend -->
-          <!-- Pilihan Peran (Sudah bersih & rapi) -->
-
           <!-- Pilihan Peran -->
-       <!-- main -->
           <div>
             <label for="loginPeran" class="block text-[11px] font-bold text-slate-700 mb-1">Masuk Sebagai / Peran Akun</label>
             <select id="loginPeran" name="peran" class="w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-xs font-semibold text-slate-800 focus:outline-none focus:border-sky-500 focus:bg-white transition">
               <option value="siswa" {{ old('peran') == 'siswa' ? 'selected' : '' }}>Siswa SMK (Praktik Kerja Lapangan)</option>
               <option value="guru" {{ old('peran') == 'guru' ? 'selected' : '' }}>Guru Pembimbing Sekolah</option>
-              <option value="dudi" {{ old('peran') == 'dudi' ? 'selected' : '' }}>Pembimbing Lapangan (DUDI)</option>
-       <!-- feature/member-1-backend -->
-              <option value="orang_tua" {{ old('peran') == 'orang_tua' ? 'selected' : '' }}>Orang Tua / Wali Siswa</option>
-              <!-- <option value="ortu" {{ old('peran') == 'ortu' ? 'selected' : '' }}>Orang Tua / Wali Siswa</option> -->
-       <!-- main -->
+              <option value="pembimbing_dudi" {{ (old('peran') == 'pembimbing_dudi' || old('peran') == 'dudi') ? 'selected' : '' }}>Pembimbing Lapangan (DUDI)</option>
+              <option value="orang_tua" {{ (old('peran') == 'orang_tua' || old('peran') == 'ortu') ? 'selected' : '' }}>Orang Tua / Wali Siswa</option>
               <option value="kepsek" {{ old('peran') == 'kepsek' ? 'selected' : '' }}>Kepala Sekolah</option>
               <option value="admin" {{ old('peran') == 'admin' ? 'selected' : '' }}>Admin PKL / Tata Usaha</option>
             </select>

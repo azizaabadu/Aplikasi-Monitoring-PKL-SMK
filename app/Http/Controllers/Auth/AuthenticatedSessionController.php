@@ -20,18 +20,25 @@ class AuthenticatedSessionController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        // 1. Validasi input termasuk field 'peran' (termasuk ortu / orang_tua)
+        // 1. Validasi input termasuk field 'peran'
         $credentials = $request->validate([
             'username' => ['required', 'string', 'max:255'],
             'password' => ['required', 'string'],
             'peran'    => [
                 'required',
                 'string',
-                Rule::in(['admin', 'guru', 'dudi', 'orang_tua', 'ortu', 'siswa']),
+                Rule::in(['admin', 'guru', 'pembimbing_dudi', 'dudi', 'orang_tua', 'ortu', 'siswa', 'kepsek', 'kepala_sekolah']),
             ],
         ]);
 
         $peranDipilih = strtolower(trim($credentials['peran']));
+        if ($peranDipilih === 'dudi') {
+            $peranDipilih = 'pembimbing_dudi';
+        } elseif ($peranDipilih === 'ortu') {
+            $peranDipilih = 'orang_tua';
+        } elseif ($peranDipilih === 'kepsek') {
+            $peranDipilih = 'kepala_sekolah';
+        }
 
         $throttleKey = Str::transliterate(
             Str::lower($credentials['username'].'|'.$request->ip())
@@ -70,11 +77,12 @@ class AuthenticatedSessionController extends Controller
             return redirect()->route('admin.dashboard');
         } elseif ($peranUser === 'guru') {
             return redirect()->route('guru.dashboard');
-        } elseif ($peranUser === 'dudi') {
+        } elseif (in_array($peranUser, ['pembimbing_dudi', 'dudi'], true)) {
             return redirect()->route('dudi.dashboard');
         } elseif (in_array($peranUser, ['orang_tua', 'ortu'], true)) {
-            // Pastikan nama route ini sama persis dengan yang ada di routes/web.php (misal: orangtua.dashboard atau ortu.dashboard)
             return redirect()->route('orangtua.dashboard');
+        } elseif (in_array($peranUser, ['kepsek', 'kepala_sekolah'], true)) {
+            return redirect()->route('kepsek.dashboard');
         }
 
         return redirect()->route('siswa.dashboard');
