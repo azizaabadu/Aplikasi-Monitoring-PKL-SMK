@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
@@ -19,12 +20,18 @@ class AuthenticatedSessionController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        // 1. Validasi input termasuk field 'peran'
+        // 1. Validasi input termasuk field 'peran' (termasuk ortu / orang_tua)
         $credentials = $request->validate([
             'username' => ['required', 'string', 'max:255'],
             'password' => ['required', 'string'],
-            'peran'    => ['required', 'string'],
+            'peran'    => [
+                'required',
+                'string',
+                Rule::in(['admin', 'guru', 'dudi', 'orang_tua', 'ortu', 'siswa']),
+            ],
         ]);
+
+        $peranDipilih = strtolower(trim($credentials['peran']));
 
         $throttleKey = Str::transliterate(
             Str::lower($credentials['username'].'|'.$request->ip())
@@ -42,14 +49,14 @@ class AuthenticatedSessionController extends Controller
         if (! Auth::attempt([
             'username' => $credentials['username'],
             'password' => $credentials['password'],
-            'peran'    => $credentials['peran'],
+            'peran'    => $peranDipilih,
             'aktif'    => true,
         ], $request->boolean('remember'))) {
             RateLimiter::hit($throttleKey, 60);
 
             return back()
                 ->withInput($request->only('username', 'peran', 'remember'))
-                ->with('error', 'Username atau kata sandi salah.');
+                ->with('error', 'Username, kata sandi, peran salah, atau akun belum aktif.');
         }
 
         RateLimiter::clear($throttleKey);
@@ -57,13 +64,16 @@ class AuthenticatedSessionController extends Controller
 
         // 3. Arahkan pengguna ke dashboard sesuai perannya masing-masing
         $user = Auth::user();
-        if ($user->peran === 'admin') {
+        $peranUser = strtolower(trim((string) $user->peran));
+
+        if ($peranUser === 'admin') {
             return redirect()->route('admin.dashboard');
-        } elseif ($user->peran === 'guru') {
+        } elseif ($peranUser === 'guru') {
             return redirect()->route('guru.dashboard');
-        } elseif ($user->peran === 'dudi') {
+        } elseif ($peranUser === 'dudi') {
             return redirect()->route('dudi.dashboard');
-        } elseif ($user->peran === 'orang_tua' || $user->peran === 'ortu') {
+        } elseif (in_array($peranUser, ['orang_tua', 'ortu'], true)) {
+            // Pastikan nama route ini sama persis dengan yang ada di routes/web.php (misal: orangtua.dashboard atau ortu.dashboard)
             return redirect()->route('orangtua.dashboard');
         }
 
