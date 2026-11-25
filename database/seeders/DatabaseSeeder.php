@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use App\Models\Dudi;
 use App\Models\User;
 use App\Models\Siswa;
-use App\Models\OrangTuaSiswa;
+use App\Models\OrangTua; // <--- Menggunakan model OrangTua
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -16,13 +16,24 @@ class DatabaseSeeder extends Seeder
 
     public function run(): void
     {
-        // 1. Akun Siswa
-        $siswa = User::updateOrCreate(
+        // 1. Akun User Siswa
+        $userSiswa = User::updateOrCreate(
             ['username' => 'siswa2'],
             [
                 'name'     => 'Rizky Pratama',
                 'peran'    => 'siswa',
                 'password' => Hash::make('password123'),
+            ]
+        );
+
+        // 1b. MEMBUAT PROFIL SISWA
+        $siswaProfile = Siswa::updateOrCreate(
+            ['user_id' => $userSiswa->id],
+            [
+                'nis'     => '2026002',
+                'nama'    => 'Rizky Pratama',
+                'kelas'   => 'XII RPL 1',
+                'jurusan' => 'Rekayasa Perangkat Lunak',
             ]
         );
 
@@ -67,7 +78,7 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // 6. Akun Orang Tua & Relasi ke Siswa
+        // 6. Akun Orang Tua & Relasi ke Siswa (Tabel orang_tuas)
         $userOrtu = User::updateOrCreate(
             ['username' => 'ortu2'],
             [
@@ -77,14 +88,15 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // Ambil data profil siswa berdasarkan user_id
-        $dataSiswa = Siswa::where('user_id', $siswa->id)->first() ?? Siswa::first();
-        if ($dataSiswa) {
-            OrangTuaSiswa::updateOrCreate(
+        // Menghubungkan Akun Orang Tua ke Profil Siswa
+        if ($siswaProfile) {
+            OrangTua::updateOrCreate(
                 ['user_id' => $userOrtu->id],
                 [
-                    'siswa_id' => $dataSiswa->id,
-                    'hubungan' => 'Orang Tua / Wali',
+                    'siswa_id'  => $siswaProfile->id,
+                    'nama_wali' => 'Wali Rizky Pratama',
+                    'kontak'    => '081234567891',
+                    'alamat'    => 'Batam',
                 ]
             );
         }
