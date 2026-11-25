@@ -10,7 +10,11 @@ class Penempatan extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['siswa_id', 'periode_pkl_id', 'dudi_id', 'ditetapkan_oleh'];
+    protected $fillable = ['siswa_id', 'periode_pkl_id', 'dudi_id', 'ditetapkan_oleh', 'status', 'disetujui_pada'];
+
+    protected $casts = [
+        'disetujui_pada' => 'datetime',
+    ];
 
     public function siswa(): BelongsTo
     {
