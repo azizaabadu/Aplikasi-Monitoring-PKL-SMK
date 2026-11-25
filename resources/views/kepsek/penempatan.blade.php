@@ -21,8 +21,8 @@
             <form action="{{ route('kepsek.penempatan.setujui') }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin mengesahkan SELURUH daftar penempatan siswa yang masih menunggu persetujuan?')">
                 @csrf
                 <input type="hidden" name="action" value="all">
-                <button type="submit" class="px-5 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-black shadow-lg shadow-amber-500/20 transition flex items-center gap-2">
-                    <i class="fa-solid fa-stamp text-base"></i>
+                <button type="submit" class="px-5 py-3 rounded-xl bg-[#0F1E38] hover:bg-[#1E3A6D] text-white text-xs font-bold shadow-md transition flex items-center gap-2">
+                    <i class="fa-solid fa-stamp text-sky-400"></i>
                     <span>Sahkan Seluruh Penempatan ({{ $stats['menunggu'] }})</span>
                 </button>
             </form>
@@ -151,8 +151,8 @@
                                         @csrf
                                         <input type="hidden" name="action" value="single">
                                         <input type="hidden" name="penempatan_id" value="{{ $pen->id }}">
-                                        <button type="submit" class="px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shadow-xs transition flex items-center gap-1.5 mx-auto">
-                                            <i class="fa-solid fa-check"></i> Sahkan
+                                        <button type="submit" class="px-3 py-1.5 rounded-lg bg-[#0F1E38] hover:bg-[#1E3A6D] text-white font-bold text-xs shadow-xs transition flex items-center gap-1.5 mx-auto">
+                                            <i class="fa-solid fa-check text-sky-400"></i> Sahkan
                                         </button>
                                     </form>
                                 @else

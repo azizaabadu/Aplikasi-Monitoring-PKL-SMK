@@ -6,10 +6,10 @@
 <div class="space-y-6">
 
     <!-- 1. HERO BANNER EKSEKUTIF -->
-    <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#0B1527] via-[#112240] to-[#1E3A6D] p-6 text-white shadow-xl sm:p-8">
+    <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#0F1E38] via-[#172B4D] to-[#1E3A6D] p-6 text-white shadow-xl sm:p-8">
         <div class="relative z-10 flex flex-col justify-between gap-6 md:flex-row md:items-center">
             <div class="space-y-2">
-                <span class="inline-flex items-center gap-2 rounded-full bg-amber-400/20 px-3 py-1 text-xs font-bold text-amber-300 border border-amber-400/30">
+                <span class="inline-flex items-center gap-2 rounded-full bg-sky-400/20 px-3 py-1 text-xs font-bold text-sky-300 border border-sky-400/30">
                     <i class="fa-solid fa-shield-halved"></i>
                     Panel Pimpinan Satuan Pendidikan
                 </span>
@@ -22,7 +22,7 @@
             </div>
 
             <div class="flex flex-wrap items-center gap-3">
-                <a href="{{ route('kepsek.penempatan') }}" class="flex items-center gap-2 rounded-xl bg-amber-500 px-4 py-3 text-xs font-black text-slate-950 shadow-lg shadow-amber-500/20 transition hover:bg-amber-400">
+                <a href="{{ route('kepsek.penempatan') }}" class="flex items-center gap-2 rounded-xl bg-sky-400 px-4 py-3 text-xs font-black text-slate-950 shadow-lg shadow-sky-400/20 transition hover:bg-sky-300">
                     <i class="fa-solid fa-stamp"></i>
                     <span>Pengesahan Penempatan (T6)</span>
                 </a>
