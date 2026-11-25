@@ -88,7 +88,7 @@ Route::middleware(['auth', 'role:siswa,guru,pembimbing_dudi,orang_tua,kepala_sek
             ->name('penempatan.store');
     });
 
-    // RUTE LENGKAP DASHBOARD & MENU GURU PEMBIMBING
+    // RUTE DASHBOARD & MENU GURU PEMBIMBING
     Route::prefix('guru')->name('guru.')->middleware('role:guru')->group(function (): void {
         Route::view('/dashboard', 'guru.dashboard')->name('dashboard');
         Route::view('/presensi', 'guru.presensi')->name('presensi');
@@ -107,6 +107,7 @@ Route::middleware(['auth', 'role:siswa,guru,pembimbing_dudi,orang_tua,kepala_sek
         })->name('umpan-balik.create');
     });
 
+    // RUTE DASHBOARD SISWA
     Route::prefix('siswa')->name('siswa.')->middleware('role:siswa')->group(function (): void {
         Route::get('/dashboard', SiswaDashboardController::class)->name('dashboard');
         Route::get('/checkin', [SiswaCheckinController::class, 'index'])->name('checkin');
@@ -138,6 +139,7 @@ Route::middleware(['auth', 'role:siswa,guru,pembimbing_dudi,orang_tua,kepala_sek
         })->name('dudis.index');
     });
 
+    // RUTE DASHBOARD ORANG TUA
     Route::prefix('orangtua')->name('orangtua.')->middleware('role:orang_tua')->group(function (): void {
         Route::get('/dashboard', [OrangTuaDashboardController::class, 'index'])->name('dashboard');
         Route::get('/kehadiran', [OrangTuaDashboardController::class, 'kehadiran'])->name('kehadiran');
@@ -146,7 +148,7 @@ Route::middleware(['auth', 'role:siswa,guru,pembimbing_dudi,orang_tua,kepala_sek
         Route::get('/mitra', [OrangTuaDashboardController::class, 'mitra'])->name('mitra');
         Route::get('/pengaturan', [OrangTuaDashboardController::class, 'pengaturan'])->name('pengaturan');
         Route::post('/pengaturan/password', [OrangTuaDashboardController::class, 'updatePassword'])->name('pengaturan.password');
-    });
+    }); fitur-ui-siswa
 
     // RUTE DASHBOARD KEPALA SEKOLAH (PRD T6, 5.8)
     Route::prefix('kepsek')->name('kepsek.')->middleware('role:kepala_sekolah,kepsek')->group(function (): void {
@@ -158,5 +160,5 @@ Route::middleware(['auth', 'role:siswa,guru,pembimbing_dudi,orang_tua,kepala_sek
         Route::get('/mitra', [KepsekDashboardController::class, 'mitra'])->name('mitra');
         Route::get('/pengaturan', [KepsekDashboardController::class, 'pengaturan'])->name('pengaturan');
         Route::post('/pengaturan/password', [KepsekDashboardController::class, 'updatePassword'])->name('pengaturan.password');
-    });
+    });main
 });
