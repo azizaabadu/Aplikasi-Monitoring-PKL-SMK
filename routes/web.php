@@ -10,6 +10,9 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\SocialLoginController;
 use App\Http\Controllers\OrangTua\DashboardController as OrangTuaDashboardController;
+use App\Http\Controllers\Siswa\CheckinController as SiswaCheckinController;
+use App\Http\Controllers\Siswa\DashboardController as SiswaDashboardController;
+use App\Http\Controllers\Siswa\LogbookController as SiswaLogbookController;
 use App\Http\Controllers\Siswa\PilihanMitraController;
 use App\Models\Dudi;
 use App\Models\PeriodePkl;
@@ -104,9 +107,12 @@ Route::middleware(['auth', 'role:siswa,guru,pembimbing_dudi,orang_tua,kepala_sek
     });
 
     Route::prefix('siswa')->name('siswa.')->middleware('role:siswa')->group(function (): void {
-        Route::view('/dashboard', 'siswa.dashboard')->name('dashboard');
-        Route::view('/checkin', 'siswa.checkin')->name('checkin');
-        Route::view('/logbook', 'siswa.logbook')->name('logbook');
+        Route::get('/dashboard', SiswaDashboardController::class)->name('dashboard');
+        Route::get('/checkin', [SiswaCheckinController::class, 'index'])->name('checkin');
+        Route::post('/checkin', [SiswaCheckinController::class, 'store'])->name('checkin.store');
+        Route::get('/logbook', [SiswaLogbookController::class, 'index'])->name('logbook');
+        Route::post('/logbook', [SiswaLogbookController::class, 'store'])->name('logbook.store');
+        Route::put('/logbook/{jurnal}', [SiswaLogbookController::class, 'update'])->name('logbook.update');
         Route::view('/penempatan', 'siswa.penempatan')->name('penempatan');
         Route::view('/penilaian', 'siswa.penilaian')->name('penilaian');
         Route::view('/laporan', 'siswa.laporan')->name('laporan');
