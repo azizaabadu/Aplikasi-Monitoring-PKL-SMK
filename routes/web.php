@@ -9,8 +9,8 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\SocialLoginController;
-use App\Http\Controllers\Siswa\PilihanMitraController;
 use App\Http\Controllers\OrangTua\DashboardController as OrangTuaDashboardController;
+use App\Http\Controllers\Siswa\PilihanMitraController;
 use App\Models\Dudi;
 use App\Models\PeriodePkl;
 use Illuminate\Http\Request;
@@ -98,6 +98,9 @@ Route::middleware(['auth', 'role:siswa,guru,pembimbing_dudi,orang_tua,kepala_sek
     // RUTE DASHBOARD PEMBIMBING DUDI
     Route::prefix('dudi')->name('dudi.')->middleware('role:pembimbing_dudi')->group(function (): void {
         Route::view('/dashboard', 'dudi.dashboard')->name('dashboard');
+        Route::get('/umpan-balik/create', function () {
+            return back()->with('status', 'Form umpan balik / pelanggaran DUDI sedang disiapkan.');
+        })->name('umpan-balik.create');
     });
 
     Route::prefix('siswa')->name('siswa.')->middleware('role:siswa')->group(function (): void {

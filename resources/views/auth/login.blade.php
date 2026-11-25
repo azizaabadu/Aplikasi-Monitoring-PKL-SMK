@@ -124,7 +124,9 @@
             <select id="loginPeran" name="peran" class="w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2.5 text-xs font-semibold text-slate-800 focus:outline-none focus:border-sky-500 focus:bg-white transition">
               <option value="siswa" {{ old('peran') == 'siswa' ? 'selected' : '' }}>Siswa SMK (Praktik Kerja Lapangan)</option>
               <option value="guru" {{ old('peran') == 'guru' ? 'selected' : '' }}>Guru Pembimbing Sekolah</option>
-              <option value="dudi" {{ old('peran') == 'dudi' ? 'selected' : '' }}>Pembimbing Lapangan (DUDI)</option>
+              <option value="pembimbing_dudi" {{ old('peran') == 'pembimbing_dudi' ? 'selected' : '' }}>
+  Pembimbing Lapangan (DUDI)
+</option>
        <!-- feature/member-1-backend -->
               <option value="orang_tua" {{ old('peran') == 'orang_tua' ? 'selected' : '' }}>Orang Tua / Wali Siswa</option>
               <!-- <option value="ortu" {{ old('peran') == 'ortu' ? 'selected' : '' }}>Orang Tua / Wali Siswa</option> -->
