@@ -17,18 +17,13 @@ use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database with complete, professional, PRD-compliant data.
-     */
     public function run(): void
     {
-        // 1. Jurusan
-        $jurusanPplg = Jurusan::firstOrCreate(['nama_jurusan' => 'PPLG']);
+        Jurusan::firstOrCreate(['nama_jurusan' => 'PPLG']);
         Jurusan::firstOrCreate(['nama_jurusan' => 'TJKT']);
         Jurusan::firstOrCreate(['nama_jurusan' => 'DKV']);
         Jurusan::firstOrCreate(['nama_jurusan' => 'Animasi']);
 
-        // 2. Periode PKL
         $periode = PeriodePkl::firstOrCreate(
             ['tahun_ajaran' => '2024/2025 Genap'],
             [
@@ -36,10 +31,9 @@ class DatabaseSeeder extends Seeder
                 'tanggal_selesai' => now()->addMonths(6)->toDateString(),
                 'status' => 'berjalan',
                 'maks_pilihan_mitra' => 3,
-            ]
+            ],
         );
 
-        // 3. Admin PKL
         User::firstOrCreate(
             ['username' => 'admin1'],
             [
@@ -48,10 +42,9 @@ class DatabaseSeeder extends Seeder
                 'peran' => 'admin',
                 'password' => Hash::make('password123'),
                 'aktif' => true,
-            ]
+            ],
         );
 
-        // 3b. Kepala Sekolah (PRD T6, 5.8)
         User::firstOrCreate(
             ['username' => 'kepsek1'],
             [
@@ -60,10 +53,9 @@ class DatabaseSeeder extends Seeder
                 'peran' => 'kepala_sekolah',
                 'password' => Hash::make('password123'),
                 'aktif' => true,
-            ]
+            ],
         );
 
-        // 4. Guru Pembimbing
         $userGuru = User::firstOrCreate(
             ['username' => 'guru1'],
             [
@@ -72,7 +64,7 @@ class DatabaseSeeder extends Seeder
                 'peran' => 'guru',
                 'password' => Hash::make('password123'),
                 'aktif' => true,
-            ]
+            ],
         );
 
         $guru = Guru::firstOrCreate(
@@ -81,10 +73,9 @@ class DatabaseSeeder extends Seeder
                 'nip' => '197804152005012003',
                 'nama' => 'Dra. Sri Wahyuni, M.Pd',
                 'kontak' => '081234567891',
-            ]
+            ],
         );
 
-        // 5. Pembimbing Lapangan DUDI & Data Mitra
         $userDudi = User::firstOrCreate(
             ['username' => 'dudi1'],
             [
@@ -93,8 +84,9 @@ class DatabaseSeeder extends Seeder
                 'peran' => 'pembimbing_dudi',
                 'password' => Hash::make('password123'),
                 'aktif' => true,
-            ]
+            ],
         );
+        $userDudi->forceFill(['peran' => 'pembimbing_dudi', 'aktif' => true])->save();
 
         $dudi = Dudi::firstOrCreate(
             ['nama_dudi' => 'PT Solusi Teknologi Nusantara'],
@@ -105,14 +97,13 @@ class DatabaseSeeder extends Seeder
                 'kontak' => '0778-462310',
                 'kuota' => 10,
                 'aktif' => true,
-            ]
+            ],
         );
-        if (!$dudi->user_id) {
+        if ($dudi->user_id === null) {
             $dudi->update(['user_id' => $userDudi->id]);
         }
 
-        // 6. Akun Siswa (Rizky Pratama)
-        $userSiswa = User::firstOrCreate(
+        $userSiswa = User::updateOrCreate(
             ['username' => 'siswa2'],
             [
                 'name' => 'Rizky Pratama',
@@ -120,25 +111,44 @@ class DatabaseSeeder extends Seeder
                 'peran' => 'siswa',
                 'password' => Hash::make('password123'),
                 'aktif' => true,
-            ]
+            ],
         );
 
-        $siswa = Siswa::firstOrCreate(
+        $siswa = Siswa::updateOrCreate(
             ['user_id' => $userSiswa->id],
             [
-                'nis' => '0058291823',
+                'nis' => '2026002',
                 'nama' => 'Rizky Pratama',
-                'kelas' => 'XII',
+                'kelas' => 'XII PPLG 1',
                 'jurusan' => 'PPLG',
                 'guru_id' => $guru->id,
                 'dudi_id' => $dudi->id,
                 'alamat' => 'Batam Center, Batam',
                 'kontak' => '081298765432',
-            ]
+            ],
         );
-        $siswa->update(['guru_id' => $guru->id, 'dudi_id' => $dudi->id]);
 
-        // 7. Akun Orang Tua (Bapak Hendra Pratama)
+        $userOrtu2 = User::updateOrCreate(
+            ['username' => 'ortu2'],
+            [
+                'name' => 'Wali Rizky Pratama',
+                'email' => 'wali.rizky@smkn1batam.sch.id',
+                'peran' => 'orang_tua',
+                'password' => Hash::make('password123'),
+                'aktif' => true,
+            ],
+        );
+
+        OrangTua::updateOrCreate(
+            ['user_id' => $userOrtu2->id],
+            [
+                'siswa_id' => $siswa->id,
+                'nama_wali' => 'Wali Rizky Pratama',
+                'kontak' => '081234567891',
+                'alamat' => 'Batam',
+            ],
+        );
+
         $userOrtu = User::firstOrCreate(
             ['username' => 'ortu_uji01'],
             [
@@ -147,26 +157,23 @@ class DatabaseSeeder extends Seeder
                 'peran' => 'orang_tua',
                 'password' => Hash::make('password123'),
                 'aktif' => true,
-            ]
+            ],
         );
 
         OrangTua::firstOrCreate(
             ['user_id' => $userOrtu->id, 'siswa_id' => $siswa->id],
             [
-                'nama_ayah' => 'Hendra Pratama',
+                'nama_wali' => 'Hendra Pratama',
                 'kontak' => '081377889900',
-            ]
+                'alamat' => 'Batam',
+            ],
         );
 
-        // 8. Penempatan
         Penempatan::firstOrCreate(
             ['siswa_id' => $siswa->id, 'periode_pkl_id' => $periode->id],
-            [
-                'dudi_id' => $dudi->id,
-            ]
+            ['dudi_id' => $dudi->id],
         );
 
-        // 9. Data Check-in Hari Ini (PRD K1)
         Absensi::firstOrCreate(
             ['siswa_id' => $siswa->id, 'tanggal' => now()->toDateString()],
             [
@@ -175,23 +182,22 @@ class DatabaseSeeder extends Seeder
                 'kondisi' => 'baik',
                 'catatan' => 'Hadir tepat waktu di kantor PT Solusi Teknologi Nusantara.',
                 'lokasi' => 'PT Solusi Teknologi Nusantara',
-            ]
+            ],
         );
 
-        // 10. Data Logbook Contoh Terverifikasi (PRD L1, L2, L3)
         Jurnal::firstOrCreate(
             ['siswa_id' => $siswa->id, 'tanggal' => now()->subDay()->toDateString()],
             [
                 'jam_mulai' => '08:00:00',
                 'jam_selesai' => '17:00:00',
-                'kegiatan' => 'Implementasi REST API Autentikasi JWT pada sistem inventaris internal mitra.',
-                'hasil' => 'Berhasil menyelesaikan middleware JWT token verification dan Axios interceptor.',
-                'kendala' => 'Sempat terjadi token expiration loop, berhasil diatasi dengan refresh token flow.',
+                'kegiatan' => 'Implementasi endpoint autentikasi pada sistem inventaris internal mitra.',
+                'hasil' => 'Endpoint autentikasi berhasil dibuat.',
+                'kendala' => null,
                 'status' => 'Disetujui',
-                'catatan_pembimbing' => 'Kerja bagus, penanganan edge-case token kedaluwarsa sudah rapi dan siap masuk staging.',
+                'catatan_pembimbing' => 'Pekerjaan telah diperiksa.',
                 'is_draft' => false,
                 'terlambat' => false,
-            ]
+            ],
         );
     }
 }

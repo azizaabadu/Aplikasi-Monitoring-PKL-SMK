@@ -114,6 +114,7 @@ Route::middleware(['auth', 'role:siswa,guru,pembimbing_dudi,orang_tua,kepala_sek
         })->name('umpan-balik.create');
     });
 
+    // RUTE DASHBOARD SISWA
     Route::prefix('siswa')->name('siswa.')->middleware('role:siswa')->group(function (): void {
         Route::get('/dashboard', SiswaDashboardController::class)->name('dashboard');
         Route::get('/checkin', [SiswaCheckinController::class, 'index'])->name('checkin');
@@ -145,6 +146,7 @@ Route::middleware(['auth', 'role:siswa,guru,pembimbing_dudi,orang_tua,kepala_sek
         })->name('dudis.index');
     });
 
+   // RUTE DASHBOARD ORANG TUA
     Route::prefix('orangtua')->name('orangtua.')->middleware('role:orang_tua')->group(function (): void {
         Route::get('/dashboard', [OrangTuaDashboardController::class, 'index'])->name('dashboard');
         Route::get('/kehadiran', [OrangTuaDashboardController::class, 'kehadiran'])->name('kehadiran');

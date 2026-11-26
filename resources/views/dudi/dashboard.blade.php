@@ -284,7 +284,6 @@
     </div>
   </div>
 @endsection
-
 @push('scripts')
 <script>
   function openRejectModal(jurnalId, namaSiswa) {
