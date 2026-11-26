@@ -19,10 +19,13 @@ class CheckinController extends Controller
             ->where('user_id', $user->id)
             ->with(['dudi', 'guru.user'])
             ->first();
+    feature/member-1-backend
 
         if (!$siswa) {
             session()->flash('warning', 'Akun Anda belum terhubung dengan data profil siswa. Silakan hubungi Administrator sekolah.');
         }
+    
+     main
 
         $today = now()->toDateString();
         $todayCheckin = $siswa ? Absensi::query()
@@ -63,7 +66,7 @@ class CheckinController extends Controller
         $presentCount = $attendance->where('status', 'Hadir')->count();
         $permitCount = $attendance->whereIn('status', ['Izin', 'Sakit'])->count();
         $totalDays = $attendance->count();
-        $attendanceRate = $totalDays > 0 ? round(($presentCount / $totalDays) * 100, 1) : 98.5;
+        $attendanceRate = $totalDays > 0 ? round(($presentCount / $totalDays) * 100, 1) : 0;
 
         return view('siswa.checkin', compact(
             'siswa',
@@ -94,8 +97,13 @@ class CheckinController extends Controller
         $user = $request->user();
         $siswa = Siswa::query()->where('user_id', $user->id)->first();
 
+     feature/member-1-backend
         if (!$siswa) {
             return back()->with('error', 'Profil siswa tidak ditemukan atau belum terhubung dengan akun Anda.');
+    
+        if (! $siswa) {
+            return back()->with('error', 'Profil siswa tidak ditemukan.');
+     main
         }
 
         $today = now()->toDateString();

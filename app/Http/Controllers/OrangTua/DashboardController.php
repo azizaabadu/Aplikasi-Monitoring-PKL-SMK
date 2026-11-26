@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Absensi;
 use App\Models\OrangTua;
 use App\Models\PeriodePkl;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Http\RedirectResponse;
@@ -42,9 +41,10 @@ class DashboardController extends Controller
                     $relation->getQuery()
                         ->with([
                             'user:id,name',
-                            'dudi:id,user_id,nama_dudi,alamat,kontak,bidang_usaha',
+                            'dudi:id,user_id,nama_dudi,alamat,kontak',
                             'dudi.user:id,name',
                             'guru.user:id,name',
+                            'penilaians',
                             'absensis' => fn ($attendanceQuery) => $attendanceQuery
                                 ->whereBetween('tanggal', [$monthStart->toDateString(), $monthEnd->toDateString()])
                                 ->orderByDesc('tanggal'),
@@ -165,6 +165,7 @@ class DashboardController extends Controller
     public function index(Request $request): View
     {
         $data = $this->getParentChildrenData($request);
+
         return view('orangtua.dashboard', $data);
     }
 
@@ -174,6 +175,7 @@ class DashboardController extends Controller
     public function kehadiran(Request $request): View
     {
         $data = $this->getParentChildrenData($request);
+
         return view('orangtua.kehadiran', $data);
     }
 
@@ -183,6 +185,7 @@ class DashboardController extends Controller
     public function logbook(Request $request): View
     {
         $data = $this->getParentChildrenData($request);
+
         return view('orangtua.logbook', $data);
     }
 
@@ -192,6 +195,7 @@ class DashboardController extends Controller
     public function penilaian(Request $request): View
     {
         $data = $this->getParentChildrenData($request);
+
         return view('orangtua.penilaian', $data);
     }
 
@@ -201,6 +205,7 @@ class DashboardController extends Controller
     public function mitra(Request $request): View
     {
         $data = $this->getParentChildrenData($request);
+
         return view('orangtua.mitra', $data);
     }
 
@@ -210,6 +215,7 @@ class DashboardController extends Controller
     public function pengaturan(Request $request): View
     {
         $data = $this->getParentChildrenData($request);
+
         return view('orangtua.pengaturan', $data);
     }
 

@@ -12,6 +12,14 @@ use Illuminate\View\View;
 
 class DashboardController extends Controller
 {
+    public function penilaian(Request $request): View
+    {
+        $siswa = $request->user()->siswa()->with(['penilaians', 'dudi'])->first();
+        $penilaians = $siswa?->penilaians ?? collect();
+
+        return view('siswa.penilaian', compact('siswa', 'penilaians'));
+    }
+
     public function __invoke(Request $request): View
     {
         $user = $request->user();
@@ -22,8 +30,14 @@ class DashboardController extends Controller
             ->with(['dudi', 'guru.user', 'penempatans.dudi'])
             ->first();
 
+       feature/member-1-backend
         if (!$siswa) {
             session()->flash('warning', 'Akun Anda belum terhubung dengan data profil siswa. Silakan hubungi Administrator sekolah.');
+      
+        // Fallback jika belum terhubung agar tampilan tidak error
+        if (! $siswa) {
+            $siswa = Siswa::query()->with(['dudi', 'guru.user'])->first();
+       main
         }
 
         $today = now()->toDateString();

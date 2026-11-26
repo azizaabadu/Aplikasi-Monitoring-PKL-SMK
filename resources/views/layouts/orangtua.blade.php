@@ -17,21 +17,10 @@
     <div class="min-h-screen lg:flex lg:h-screen lg:overflow-hidden">
         
         <!-- SIDEBAR DESKTOP -->
-        <aside class="hidden w-72 shrink-0 flex-col justify-between border-r border-slate-800 bg-[#0F1E38] text-slate-300 lg:sticky lg:top-0 lg:flex lg:h-screen lg:overflow-y-auto">
-            <div class="space-y-6 p-6">
+        <aside class="hidden h-screen w-72 shrink-0 flex-col justify-between border-r border-slate-800 bg-[#0F1E38] text-slate-300 lg:sticky lg:top-0 lg:flex">
+            <div class="flex min-h-0 flex-1 flex-col gap-6 overflow-y-auto p-6">
                 <!-- Brand Header -->
-                <a href="{{ route('orangtua.dashboard') }}" class="flex items-center gap-3">
-                    <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-tr from-sky-500 to-blue-600 text-white shadow-md shadow-sky-500/20">
-                        <i class="fa-solid fa-graduation-cap text-lg"></i>
-                    </div>
-                    <div>
-                        <div class="flex items-center gap-1.5">
-                            <span class="text-lg font-black tracking-wider text-white">PKL.ID</span>
-                            <span class="rounded bg-sky-500/20 px-1.5 py-0.5 text-[9px] font-extrabold uppercase text-sky-400">Vokasi</span>
-                        </div>
-                        <p class="text-[10px] font-semibold text-slate-400">Portal Pemantauan Orang Tua</p>
-                    </div>
-                </a>
+                @include('layouts.partials.brand', ['href' => route('orangtua.dashboard'), 'caption' => 'Portal Monitoring Vokasi'])
 
                 <!-- Nav Menu -->
                 <div class="space-y-1.5">
@@ -82,7 +71,7 @@
             </div>
 
             <!-- Footer Sidebar Instansi -->
-            <div class="space-y-4 border-t border-slate-800 bg-[#0B172E] p-5">
+            <div class="shrink-0 space-y-4 border-t border-slate-800 bg-[#0B172E] p-5">
                 <div class="flex items-center gap-3">
                     <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-white/10 text-white">
                         <i class="fa-solid fa-school text-xs text-sky-400"></i>
@@ -110,8 +99,8 @@
             <header class="sticky top-0 z-30 flex min-h-[70px] items-center justify-between gap-4 border-b border-slate-200 bg-white px-4 py-3 shadow-sm sm:px-6 lg:px-8">
                 <!-- Mobile Brand -->
                 <a href="{{ route('orangtua.dashboard') }}" class="flex items-center gap-2.5 lg:hidden">
-                    <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-[#0F1E38] text-white">
-                        <i class="fa-solid fa-graduation-cap text-xs text-sky-400"></i>
+                    <div class="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-sky-500 to-blue-600 text-white shadow-sm">
+                        <i class="fa-solid fa-graduation-cap text-xs"></i>
                     </div>
                     <span class="text-sm font-black text-[#0F1E38]">PKL.ID</span>
                 </a>
