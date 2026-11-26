@@ -1,9 +1,18 @@
-function handleRevisiLogbook(e) {
-    e.preventDefault();
-    e.target.reset();
-    closeModal('modalRevisiLogbook');
-    showToast('Catatan revisi logbook berhasil dikirim ke siswa.');
-  }
+document.addEventListener('submit', (event) => {
+    const form = event.target;
 
-Object.assign(window, { handleRevisiLogbook });
+    if (!(form instanceof HTMLFormElement) || !form.hasAttribute('data-disable-on-submit')) {
+        return;
+    }
+
+    const submitButton = event.submitter ?? form.querySelector('button[type="submit"]');
+
+    if (!(submitButton instanceof HTMLButtonElement)) {
+        return;
+    }
+
+    submitButton.disabled = true;
+    submitButton.setAttribute('aria-disabled', 'true');
+    submitButton.classList.add('cursor-wait', 'opacity-70');
+});
 

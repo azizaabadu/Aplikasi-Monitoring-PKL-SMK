@@ -53,4 +53,9 @@ class Dudi extends Model
     {
         return $this->hasMany(Penempatan::class);
     }
+
+    public function feedback(): HasMany
+    {
+        return $this->hasMany(DudiFeedback::class);
+    }
 }

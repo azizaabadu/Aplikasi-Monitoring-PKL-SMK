@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\SocialLoginController;
+use App\Http\Controllers\Dudi\DashboardController as DudiDashboardController;
 use App\Http\Controllers\Kepsek\DashboardController as KepsekDashboardController;
 use App\Http\Controllers\OrangTua\DashboardController as OrangTuaDashboardController;
 use App\Http\Controllers\Siswa\CheckinController as SiswaCheckinController;
@@ -101,10 +102,17 @@ Route::middleware(['auth', 'role:siswa,guru,pembimbing_dudi,orang_tua,kepala_sek
 
     // RUTE DASHBOARD PEMBIMBING DUDI
     Route::prefix('dudi')->name('dudi.')->middleware('role:pembimbing_dudi')->group(function (): void {
-        Route::view('/dashboard', 'dudi.dashboard')->name('dashboard');
-        Route::get('/umpan-balik/create', function () {
-            return back()->with('status', 'Form umpan balik / pelanggaran DUDI sedang disiapkan.');
-        })->name('umpan-balik.create');
+        Route::get('/dashboard', [DudiDashboardController::class, 'dashboard'])->name('dashboard');
+        Route::get('/logbook', [DudiDashboardController::class, 'logbook'])->name('logbook');
+        Route::post('/logbook/{jurnal}/sahkan', [DudiDashboardController::class, 'approveLogbook'])->name('logbook.approve');
+        Route::post('/logbook/{jurnal}/revisi', [DudiDashboardController::class, 'requestLogbookRevision'])->name('logbook.revision');
+        Route::get('/umpan-balik', [DudiDashboardController::class, 'feedback'])->name('feedback');
+        Route::post('/umpan-balik', [DudiDashboardController::class, 'storeFeedback'])->name('feedback.store');
+        Route::get('/penilaian', [DudiDashboardController::class, 'penilaian'])->name('penilaian');
+        Route::put('/penilaian/{siswa}', [DudiDashboardController::class, 'storePenilaian'])->name('penilaian.update');
+        Route::get('/pengaturan', [DudiDashboardController::class, 'pengaturan'])->name('pengaturan');
+        Route::put('/pengaturan', [DudiDashboardController::class, 'updatePengaturan'])->name('pengaturan.update');
+        Route::put('/pengaturan/password', [DudiDashboardController::class, 'updatePassword'])->name('pengaturan.password');
     });
 
     // RUTE DASHBOARD SISWA
@@ -116,7 +124,7 @@ Route::middleware(['auth', 'role:siswa,guru,pembimbing_dudi,orang_tua,kepala_sek
         Route::post('/logbook', [SiswaLogbookController::class, 'store'])->name('logbook.store');
         Route::put('/logbook/{jurnal}', [SiswaLogbookController::class, 'update'])->name('logbook.update');
         Route::view('/penempatan', 'siswa.penempatan')->name('penempatan');
-        Route::view('/penilaian', 'siswa.penilaian')->name('penilaian');
+        Route::get('/penilaian', [SiswaDashboardController::class, 'penilaian'])->name('penilaian');
         Route::view('/laporan', 'siswa.laporan')->name('laporan');
         Route::view('/pengaturan', 'siswa.pengaturan')->name('pengaturan');
 

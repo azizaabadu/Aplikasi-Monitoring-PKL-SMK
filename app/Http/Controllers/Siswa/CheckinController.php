@@ -18,7 +18,7 @@ class CheckinController extends Controller
         $siswa = Siswa::query()
             ->where('user_id', $user->id)
             ->with(['dudi', 'guru.user'])
-            ->first() ?? Siswa::query()->with(['dudi', 'guru.user'])->first();
+            ->first();
 
         $today = now()->toDateString();
         $todayCheckin = $siswa ? Absensi::query()
@@ -59,7 +59,7 @@ class CheckinController extends Controller
         $presentCount = $attendance->where('status', 'Hadir')->count();
         $permitCount = $attendance->whereIn('status', ['Izin', 'Sakit'])->count();
         $totalDays = $attendance->count();
-        $attendanceRate = $totalDays > 0 ? round(($presentCount / $totalDays) * 100, 1) : 98.5;
+        $attendanceRate = $totalDays > 0 ? round(($presentCount / $totalDays) * 100, 1) : 0;
 
         return view('siswa.checkin', compact(
             'siswa',
@@ -88,10 +88,9 @@ class CheckinController extends Controller
         ]);
 
         $user = $request->user();
-        $siswa = Siswa::query()->where('user_id', $user->id)->first()
-            ?? Siswa::first();
+        $siswa = Siswa::query()->where('user_id', $user->id)->first();
 
-        if (!$siswa) {
+        if (! $siswa) {
             return back()->with('error', 'Profil siswa tidak ditemukan.');
         }
 

@@ -17,20 +17,15 @@
         body { font-family: 'Inter', sans-serif; }
     </style>
 </head>
-<body class="bg-slate-100 font-sans text-slate-900 antialiased overflow-hidden">
+<body class="min-h-screen bg-slate-100 font-sans text-slate-900 antialiased">
 
-  <div class="h-screen flex overflow-hidden">
+  <div class="flex min-h-screen">
 
     <!-- SIDEBAR NAVIGASI KIRI (TETAP DIAM SAAT KONTEN DI-SCROLL) -->
-    <aside class="w-64 h-screen bg-[#0F1E38] text-slate-300 flex flex-col justify-between hidden lg:flex shrink-0 border-r border-slate-800 z-30">
-      <div class="p-6 space-y-6 overflow-y-auto">
+    <aside class="sticky top-0 h-screen w-64 bg-[#0F1E38] text-slate-300 flex flex-col justify-between hidden lg:flex shrink-0 border-r border-slate-800 z-30 self-start">
+      <div class="min-h-0 flex-1 p-6 space-y-6 overflow-y-auto">
         <!-- Logo Portal -->
-        <div class="space-y-1">
-          <a href="{{ route('siswa.dashboard') }}" class="text-xl font-black tracking-wider text-white flex items-center gap-2">
-            <i class="fa-solid fa-graduation-cap text-sky-400"></i> PKL.ID
-          </a>
-          <div class="text-[10px] uppercase tracking-widest text-slate-400 font-semibold">Platform Monitoring Vokasi</div>
-        </div>
+        @include('layouts.partials.brand', ['href' => route('siswa.dashboard'), 'caption' => 'Portal Monitoring Vokasi'])
 
         <!-- Menu Navigasi -->
         <nav class="space-y-1.5 text-xs font-semibold">
@@ -76,7 +71,7 @@
     </aside>
 
     <!-- KONTEN UTAMA (TERMASUK HEADER DINAMIS) -->
-    <div class="flex-1 flex flex-col h-screen min-w-0 overflow-hidden">
+    <div class="flex min-h-screen min-w-0 flex-1 flex-col">
 
       <!-- HEADER UTAMA -->
       <header class="bg-white border-b border-slate-200/80 shrink-0 z-30 px-6 py-3.5 flex items-center justify-between gap-4 shadow-sm">
@@ -147,7 +142,7 @@
       </header>
 
       <!-- KONTEN UTAMA HALAMAN -->
-      <main class="flex-1 p-6 sm:p-8 overflow-y-auto">
+      <main class="min-w-0 flex-1 p-6 sm:p-8">
         @yield('content')
       </main>
 

@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Masuk — PKL.ID Platform Vokasi Nasional</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     body { font-family: 'Plus Jakarta Sans', sans-serif; }
@@ -15,7 +16,7 @@
   <!-- Kontainer Utama -->
   <div class="w-full max-w-4xl bg-white rounded-3xl shadow-xl overflow-hidden flex flex-col lg:flex-row border border-slate-200/80">
 
-    <!-- SISI KIRI: Branding & Logo Geometris PKL.ID -->
+    <!-- SISI KIRI: Branding PKL.ID -->
     <div class="lg:w-5/12 bg-gradient-to-br from-[#0F1E38] via-[#172B4D] to-[#1E3A6D] text-white p-6 sm:p-8 flex flex-col justify-between relative overflow-hidden">
       <div class="absolute -right-20 -top-20 w-60 h-60 bg-sky-500/10 rounded-full blur-2xl pointer-events-none"></div>
 
@@ -27,14 +28,10 @@
         </span>
       </div>
 
-      <!-- Logo Center 3D -->
+      <!-- Logo yang sama dengan dashboard -->
       <div class="relative z-10 my-auto py-6 flex flex-col items-center text-center">
-        <div class="w-32 h-32 sm:w-36 sm:h-36 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center shadow-inner backdrop-blur-sm p-3 mb-4">
-          <svg viewBox="0 0 64 64" class="w-20 h-20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M32 6L56 30L32 54L8 30L32 6Z" stroke="#38BDF8" stroke-width="3" stroke-linejoin="round"/>
-            <path d="M32 14L48 30L32 46L16 30L32 14Z" stroke="#93C5FD" stroke-width="2" stroke-opacity="0.7"/>
-            <text x="32" y="36" text-anchor="middle" fill="#FFFFFF" font-size="13" font-weight="800" font-family="Plus Jakarta Sans, sans-serif" letter-spacing="1">PKL.ID</text>
-          </svg>
+        <div class="mb-4 flex h-28 w-28 items-center justify-center rounded-3xl bg-gradient-to-br from-sky-500 to-blue-600 text-white shadow-xl shadow-sky-950/30 ring-1 ring-white/20 sm:h-32 sm:w-32">
+          <i class="fa-solid fa-graduation-cap text-5xl sm:text-6xl" aria-hidden="true"></i>
         </div>
         <h2 class="text-xl sm:text-2xl font-extrabold tracking-tight">PKL.ID</h2>
         <span class="inline-block mt-1.5 px-2.5 py-0.5 rounded-full bg-sky-400/20 text-sky-300 text-[10px] font-bold tracking-widest uppercase border border-sky-400/30">
@@ -55,8 +52,8 @@
         <!-- Judul Sambutan -->
         <div class="space-y-1">
           <div class="flex items-center gap-2.5">
-            <div class="w-8 h-8 rounded-lg bg-slate-900 text-white flex items-center justify-center font-extrabold text-xs shadow">
-              P
+            <div class="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-sky-500 to-blue-600 text-white shadow">
+              <i class="fa-solid fa-graduation-cap text-xs" aria-hidden="true"></i>
             </div>
             <div>
               <div class="font-extrabold text-slate-900 text-sm leading-none">PKL.ID</div>
