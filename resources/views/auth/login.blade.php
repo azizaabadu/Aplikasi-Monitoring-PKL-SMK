@@ -108,7 +108,7 @@
         @endif
 
         <!-- Form Login Terhubung ke Controller Laravel -->
-        <form action="{{ route('login') }}" method="POST" class="space-y-3">
+        <form action="{{ route('login.store') }}" method="POST" class="space-y-3">
           @csrf
           <!-- Pilihan Peran -->
           <div>

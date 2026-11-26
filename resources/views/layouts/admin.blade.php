@@ -183,51 +183,7 @@
     <span id="uiToastText">Berhasil diproses.</span>
   </div>
 
-  <script>
-    function showToast(message) {
-      const toast = document.getElementById('uiToast');
-      const text = document.getElementById('uiToastText');
-      text.textContent = message;
-      toast.classList.remove('hidden');
-      toast.classList.add('flex');
-      clearTimeout(window.toastTimer);
-      window.toastTimer = setTimeout(() => {
-        toast.classList.add('hidden');
-        toast.classList.remove('flex');
-      }, 3000);
-    }
-
-    function openModal(id) {
-      const el = document.getElementById(id);
-      if (!el) return;
-      el.classList.remove('hidden');
-      el.classList.add('flex');
-    }
-
-    function closeModal(id) {
-      const el = document.getElementById(id);
-      if (!el) return;
-      el.classList.add('hidden');
-      el.classList.remove('flex');
-    }
-
-    function openInfoModal(title, body) {
-      document.getElementById('infoModalTitle').textContent = title;
-      document.getElementById('infoModalBody').textContent = body;
-      openModal('infoModal');
-    }
-
-    function triggerDownload(filename, content, mimeType = 'text/plain;charset=utf-8;') {
-      const blob = new Blob([content], { type: mimeType });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = filename;
-      a.click();
-      URL.revokeObjectURL(url);
-    }
-  </script>
-
   @stack('scripts')
+  @vite('resources/js/app.js')
 </body>
 </html>
