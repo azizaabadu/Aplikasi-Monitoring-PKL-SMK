@@ -11,10 +11,7 @@ use App\Models\OrangTua;
 use App\Models\Penempatan;
 use App\Models\PeriodePkl;
 use App\Models\Siswa;
-use App\Models\User; fitur-ui-siswa
-use App\Models\Siswa;
-use App\Models\OrangTua; // <--- Menggunakan model OrangTua
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;main
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -24,19 +21,16 @@ class DatabaseSeeder extends Seeder
      * Seed the application's database with complete, professional, PRD-compliant data.
      */
     public function run(): void
-    { fitur-ui-siswa
-        // 1. Akun User Siswa
-        $userSiswa = User::updateOrCreate(
-            ['username' => 'siswa2'],
+    {
         // 1. Jurusan
-        $jurusanPplg = Jurusan::firstOrCreate(['nama_jurusan' => 'PPLG']);
+        Jurusan::firstOrCreate(['nama_jurusan' => 'PPLG']);
         Jurusan::firstOrCreate(['nama_jurusan' => 'TJKT']);
         Jurusan::firstOrCreate(['nama_jurusan' => 'DKV']);
         Jurusan::firstOrCreate(['nama_jurusan' => 'Animasi']);
 
         // 2. Periode PKL
         $periode = PeriodePkl::firstOrCreate(
-            ['tahun_ajaran' => '2024/2025 Genap'], main
+            ['tahun_ajaran' => '2024/2025 Genap'],
             [
                 'tanggal_mulai' => now()->startOfMonth()->toDateString(),
                 'tanggal_selesai' => now()->addMonths(6)->toDateString(),
@@ -56,21 +50,8 @@ class DatabaseSeeder extends Seeder
                 'aktif' => true,
             ]
         );
-          fitur-ui-siswa
-        // 1b. MEMBUAT PROFIL SISWA
-        $siswaProfile = Siswa::updateOrCreate(
-            ['user_id' => $userSiswa->id],
-            [
-                'nis'     => '2026002',
-                'nama'    => 'Rizky Pratama',
-                'kelas'   => 'XII RPL 1',
-                'jurusan' => 'Rekayasa Perangkat Lunak',
-            ]
-        );
 
-        // 2. Akun Guru Pembimbing
-        User::updateOrCreate(
-        // 3b. Kepala Sekolah (PRD T6, 5.8)
+        // 4. Kepala Sekolah
         User::firstOrCreate(
             ['username' => 'kepsek1'],
             [
@@ -82,8 +63,8 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // 4. Guru Pembimbing
-        $userGuru = User::firstOrCreate( main
+        // 5. Guru Pembimbing
+        $userGuru = User::firstOrCreate(
             ['username' => 'guru1'],
             [
                 'name' => 'Dra. Sri Wahyuni, M.Pd',
@@ -103,7 +84,7 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // 5. Pembimbing Lapangan DUDI & Data Mitra
+        // 6. Pembimbing Lapangan DUDI & Data Mitra
         $userDudi = User::firstOrCreate(
             ['username' => 'dudi1'],
             [
@@ -125,18 +106,15 @@ class DatabaseSeeder extends Seeder
                 'kuota' => 10,
                 'aktif' => true,
             ]
-        ); fitur-ui-siswa
+        );
 
-        // 5. Akun Administrator
-        User::updateOrCreate(
-            ['username' => 'admin'],
-        if (!$dudi->user_id) {
+        if (! $dudi->user_id) {
             $dudi->update(['user_id' => $userDudi->id]);
         }
 
-        // 6. Akun Siswa (Rizky Pratama)
-        $userSiswa = User::firstOrCreate(
-            ['username' => 'siswa2'],main
+        // 7. Akun Siswa (Rizky Pratama)
+        $userSiswa = User::updateOrCreate(
+            ['username' => 'siswa2'],
             [
                 'name' => 'Rizky Pratama',
                 'email' => 'rizky.pratama@siswa.smkn1batam.sch.id',
@@ -144,35 +122,14 @@ class DatabaseSeeder extends Seeder
                 'password' => Hash::make('password123'),
                 'aktif' => true,
             ]
-        ); fitur-ui-siswa
-        // 6. Akun Orang Tua & Relasi ke Siswa (Tabel orang_tuas)
-        $userOrtu = User::updateOrCreate(
-            ['username' => 'ortu2'],
-            [
-                'name'     => 'Wali Rizky Pratama',
-                'peran'    => 'orang_tua',
-                'password' => Hash::make('password123'),
-            ]
         );
 
-        // Menghubungkan Akun Orang Tua ke Profil Siswa
-        if ($siswaProfile) {
-            OrangTua::updateOrCreate(
-                ['user_id' => $userOrtu->id],
-                [
-                    'siswa_id'  => $siswaProfile->id,
-                    'nama_wali' => 'Wali Rizky Pratama',
-                    'kontak'    => '081234567891',
-                    'alamat'    => 'Batam',
-                ]
-            );
-        }
-        $siswa = Siswa::firstOrCreate(
+        $siswa = Siswa::updateOrCreate(
             ['user_id' => $userSiswa->id],
             [
-                'nis' => '0058291823',
+                'nis' => '2026002',
                 'nama' => 'Rizky Pratama',
-                'kelas' => 'XII',
+                'kelas' => 'XII PPLG 1',
                 'jurusan' => 'PPLG',
                 'guru_id' => $guru->id,
                 'dudi_id' => $dudi->id,
@@ -180,10 +137,30 @@ class DatabaseSeeder extends Seeder
                 'kontak' => '081298765432',
             ]
         );
-        $siswa->update(['guru_id' => $guru->id, 'dudi_id' => $dudi->id]); main
 
-        // 7. Akun Orang Tua (Bapak Hendra Pratama)
-        $userOrtu = User::firstOrCreate(
+        // 8. Akun Orang Tua (ortu2 & ortu_uji01)
+        $userOrtu2 = User::updateOrCreate(
+            ['username' => 'ortu2'],
+            [
+                'name' => 'Wali Rizky Pratama',
+                'email' => 'wali.rizky@smkn1batam.sch.id',
+                'peran' => 'orang_tua',
+                'password' => Hash::make('password123'),
+                'aktif' => true,
+            ]
+        );
+
+        OrangTua::updateOrCreate(
+            ['user_id' => $userOrtu2->id],
+            [
+                'siswa_id' => $siswa->id,
+                'nama_wali' => 'Wali Rizky Pratama',
+                'kontak' => '081234567891',
+                'alamat' => 'Batam',
+            ]
+        );
+
+        $userOrtuUji = User::firstOrCreate(
             ['username' => 'ortu_uji01'],
             [
                 'name' => 'Hendra Pratama',
@@ -195,14 +172,15 @@ class DatabaseSeeder extends Seeder
         );
 
         OrangTua::firstOrCreate(
-            ['user_id' => $userOrtu->id, 'siswa_id' => $siswa->id],
+            ['user_id' => $userOrtuUji->id, 'siswa_id' => $siswa->id],
             [
-                'nama_ayah' => 'Hendra Pratama',
+                'nama_wali' => 'Hendra Pratama',
                 'kontak' => '081377889900',
+                'alamat' => 'Batam',
             ]
         );
 
-        // 8. Penempatan
+        // 9. Penempatan
         Penempatan::firstOrCreate(
             ['siswa_id' => $siswa->id, 'periode_pkl_id' => $periode->id],
             [
@@ -210,7 +188,7 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // 9. Data Check-in Hari Ini (PRD K1)
+        // 10. Data Check-in Hari Ini (PRD K1)
         Absensi::firstOrCreate(
             ['siswa_id' => $siswa->id, 'tanggal' => now()->toDateString()],
             [
@@ -222,7 +200,7 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // 10. Data Logbook Contoh Terverifikasi (PRD L1, L2, L3)
+        // 11. Data Logbook Contoh Terverifikasi (PRD L1, L2, L3)
         Jurnal::firstOrCreate(
             ['siswa_id' => $siswa->id, 'tanggal' => now()->subDay()->toDateString()],
             [
