@@ -27,12 +27,7 @@
     <aside class="w-64 h-screen bg-[#0F1E38] text-slate-300 flex flex-col justify-between hidden lg:flex shrink-0 border-r border-slate-800 z-30">
       <div class="p-6 space-y-6 overflow-y-auto">
         <!-- Logo Portal -->
-        <div class="space-y-1">
-          <a href="{{ route('kepsek.dashboard') }}" class="text-xl font-black tracking-wider text-white flex items-center gap-2">
-            <i class="fa-solid fa-graduation-cap text-sky-400"></i> PKL.ID
-          </a>
-          <div class="text-[10px] uppercase tracking-widest text-slate-400 font-semibold">Platform Monitoring Vokasi</div>
-        </div>
+        @include('layouts.partials.brand', ['href' => route('kepsek.dashboard'), 'caption' => 'Portal Monitoring Vokasi'])
 
         <!-- Menu Navigasi Sesuai PRD -->
         <nav class="space-y-1.5 text-xs font-semibold">

@@ -54,7 +54,7 @@
                             </span>
                         </div>
                         <p class="text-xs text-slate-500 mt-1">
-                            Bidang Industri: <strong class="text-slate-700">{{ $dudi?->bidang_usaha ?? 'Teknologi Informasi, Rekayasa Perangkat Lunak & Cloud Service' }}</strong>
+                            Bidang Industri: <strong class="text-slate-700">Informasi bidang usaha belum tersedia.</strong>
                         </p>
                     </div>
                 </div>

@@ -1,209 +1,110 @@
-@extends('layouts.dudi') {{-- Atau layouts.app / layout khusus DUDI --}}
+@extends('layouts.dudi')
 
-@section('title', 'Dashboard Pembimbing DUDI - Portal PKL.ID')
+@section('title', 'Dashboard Pembimbing DUDI - PKL.ID')
 
 @section('content')
-  <!-- Breadcrumb & Info Mitra -->
-  <div class="flex flex-wrap items-center justify-between gap-3 mb-5">
-    <div class="flex items-center gap-2 text-[11px] text-slate-500 font-medium">
-      <i class="fa-solid fa-house text-[10px] text-slate-400"></i>
-      <span class="font-bold text-slate-800">Dashboard Pembimbing DUDI</span>
-    </div>
-
-    <div class="flex items-center gap-2">
-      <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 text-[10px] font-extrabold tracking-wide">
-        <i class="fa-solid fa-building text-[9px]"></i>
-        MITRA: PT SOLUSI TEKNOLOGI NUSANTARA
-      </span>
-    </div>
-  </div>
-
-  <!-- Hero Header -->
-  <div class="bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-6 shadow-xs flex flex-col lg:flex-row lg:items-center justify-between gap-5 mb-5">
-    <div class="space-y-2 max-w-2xl">
-      <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-sky-50 border border-sky-200/80 text-sky-700 text-[10px] font-extrabold uppercase tracking-wider">
-        <i class="fa-solid fa-user-tie text-[10px]"></i>
-        PANEL PEMBIMBING LAPANGAN
-      </span>
-      <h1 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight leading-snug">
-        Selamat Datang, Bapak Ahmad Fauzi, S.Kom
-      </h1>
-      <p class="text-xs text-slate-500 leading-relaxed">
-        Kelola pengesahan logbook harian siswa magang, berikan umpan balik atau laporan pelanggaran, serta masukkan nilai komponen lapangan secara tepat waktu.
-      </p>
-    </div>
-
-    <div class="flex flex-wrap items-center gap-2 shrink-0">
-      <a href="{{ route('dudi.umpan-balik.create') ?? '#' }}" class="px-4 py-2.5 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-[11px] font-extrabold flex items-center gap-2 shadow-xs transition">
-        <i class="fa-solid fa-triangle-exclamation text-xs"></i>
-        <span>Tulis Umpan Balik / Pelanggaran</span>
-      </a>
-    </div>
-  </div>
-
-  <!-- 3 KPI Utama Dashboard DUDI -->
-  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-    <!-- Siswa di Mitra -->
-    <div class="bg-white rounded-2xl border border-slate-200/90 p-5 shadow-xs space-y-3">
-      <div class="flex items-start justify-between gap-2">
-        <span class="text-[11px] font-bold text-slate-500">Siswa Bimbingan di Mitra</span>
-        <span class="w-9 h-9 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center text-sm">
-          <i class="fa-solid fa-users"></i>
-        </span>
-      </div>
-      <div class="flex items-baseline gap-1.5">
-        <span class="text-3xl font-black text-slate-900">14</span>
-        <span class="text-xs font-semibold text-slate-400">Siswa Aktif</span>
-      </div>
-      <div class="text-[10px] text-slate-500">Lintas Jurusan (PPLG &amp; DKV)</div>
-    </div>
-
-    <!-- Logbook Menunggu Pengesahan -->
-    <div class="bg-white rounded-2xl border border-slate-200/90 p-5 shadow-xs space-y-3">
-      <div class="flex items-start justify-between gap-2">
-        <span class="text-[11px] font-bold text-slate-500">Logbook Menunggu Pengesahan</span>
-        <span class="w-9 h-9 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-sm">
-          <i class="fa-solid fa-clock-rotate-left"></i>
-        </span>
-      </div>
-      <div class="flex items-baseline gap-1.5">
-        <span class="text-3xl font-black text-amber-600">3</span>
-        <span class="text-xs font-semibold text-slate-400">Laporan Baru</span>
-      </div>
-      <div class="text-[10px] text-slate-500">Perlu divalidasi hari ini</div>
-    </div>
-
-    <!-- Penilaian Lapangan Belum Diisi -->
-    <div class="bg-white rounded-2xl border border-slate-200/90 p-5 shadow-xs space-y-3">
-      <div class="flex items-start justify-between gap-2">
-        <span class="text-[11px] font-bold text-slate-500">Status Penilaian Lapangan</span>
-        <span class="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-sm">
-          <i class="fa-solid fa-award"></i>
-        </span>
-      </div>
-      <div class="flex items-baseline gap-1.5">
-        <span class="text-3xl font-black text-slate-900">10 / 14</span>
-        <span class="text-xs font-semibold text-slate-400">Siswa Selesai Dinilai</span>
-      </div>
-      <div class="text-[10px] text-indigo-700 font-bold">Komponen Sikap &amp; Teknis (60%)</div>
-    </div>
-  </div>
-
-  <!-- Daftar Logbook Menunggu Pengesahan (Modul L3) & Siswa Bimbingan -->
-  <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
-    <!-- Logbook Menunggu Validasi -->
-    <section class="lg:col-span-7 bg-white rounded-2xl border border-slate-200/90 p-5 shadow-xs space-y-4">
-      <div class="flex items-center justify-between">
-        <h2 class="text-sm font-black text-slate-900 flex items-center gap-2">
-          <i class="fa-solid fa-book-open text-sky-600"></i>
-          <span>Logbook Menunggu Pengesahan (L3)</span>
-        </h2>
-        <span class="text-[10px] font-extrabold px-2.5 py-1 rounded-full bg-amber-50 text-amber-700">3 Pending</span>
-      </div>
-
-      <div class="space-y-3 text-xs">
-        <!-- Item Logbook 1 -->
-        <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 space-y-2">
-          <div class="flex items-center justify-between">
+    <div class="mx-auto max-w-7xl space-y-6">
+        <div class="flex flex-wrap items-center justify-between gap-3">
             <div>
-              <span class="font-extrabold text-slate-900">Rizky Pratama</span>
-              <span class="text-[10px] text-slate-400 ml-1.5">XII PPLG 1 &bull; 23 Nov 2026</span>
+                <p class="text-xs font-semibold text-slate-500">Beranda <span class="px-1">/</span> Dashboard</p>
+                <h1 class="mt-1 text-2xl font-black tracking-tight text-slate-900">Dashboard Pembimbing DUDI</h1>
             </div>
-            <span class="px-2 py-0.5 rounded bg-amber-100 text-amber-800 text-[9px] font-extrabold">Menunggu Pengesahan</span>
-          </div>
-          <p class="text-slate-600 bg-white p-2.5 rounded-lg border border-slate-200/60">
-            <strong>Kegiatan:</strong> Implementasi integrasi endpoint REST API login menggunakan Laravel Sanctum. <br>
-            <strong>Hasil:</strong> Berhasil melakukan pengujian via Postman tanpa kendala.
-          </p>
-          <div class="flex items-center justify-end gap-2 pt-1">
-            <button type="button" onclick="openModal('modalRevisiLogbook')" class="px-3 py-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-700 font-bold text-[11px]">
-              Minta Revisi
-            </button>
-            <button type="button" onclick="showToast('Logbook Rizky Pratama berhasil disahkan.')" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-[11px]">
-              Sahkan Logbook
-            </button>
-          </div>
+            @if ($dudi)
+                <span class="inline-flex items-center gap-2 rounded-full border border-sky-200 bg-sky-50 px-3 py-1.5 text-xs font-bold text-sky-800">
+                    <i class="fa-solid fa-building" aria-hidden="true"></i>{{ $dudi->nama_dudi }}
+                </span>
+            @endif
         </div>
 
-        <!-- Item Logbook 2 -->
-        <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 space-y-2">
-          <div class="flex items-center justify-between">
-            <div>
-              <span class="font-extrabold text-slate-900">Siti Nurhaliza</span>
-              <span class="text-[10px] text-slate-400 ml-1.5">XII PPLG 2 &bull; 23 Nov 2026</span>
+        <section class="overflow-hidden rounded-2xl bg-gradient-to-br from-[#0F1E38] via-[#15345E] to-sky-800 p-6 text-white shadow-lg sm:p-8">
+            <div class="flex flex-col justify-between gap-6 lg:flex-row lg:items-center">
+                <div class="max-w-2xl space-y-3">
+                    <span class="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[10px] font-extrabold uppercase tracking-wider text-sky-100">
+                        <i class="fa-solid fa-user-tie" aria-hidden="true"></i> Pembimbing Lapangan
+                    </span>
+                    <h2 class="text-2xl font-black tracking-tight sm:text-3xl">Selamat datang, {{ auth()->user()->name }}</h2>
+                    <p class="max-w-xl text-sm leading-relaxed text-sky-100/90">Pantau kehadiran dan aktivitas siswa, sahkan logbook, sampaikan umpan balik, serta isi penilaian lapangan dari satu tempat.</p>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                    <a href="{{ route('dudi.logbook') }}" class="inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-xs font-extrabold text-[#0F1E38] transition hover:bg-sky-50"><i class="fa-solid fa-book-open" aria-hidden="true"></i>Periksa logbook</a>
+                    <a href="{{ route('dudi.feedback') }}" class="inline-flex items-center gap-2 rounded-xl border border-white/30 bg-white/10 px-4 py-2.5 text-xs font-bold text-white transition hover:bg-white/20"><i class="fa-solid fa-message" aria-hidden="true"></i>Tulis umpan balik</a>
+                </div>
             </div>
-            <span class="px-2 py-0.5 rounded bg-amber-100 text-amber-800 text-[9px] font-extrabold">Menunggu Pengesahan</span>
-          </div>
-          <p class="text-slate-600 bg-white p-2.5 rounded-lg border border-slate-200/60">
-            <strong>Kegiatan:</strong> Desksi UI/UX halaman dashboard utama menggunakan Figma.
-          </p>
-          <div class="flex items-center justify-end gap-2 pt-1">
-            <button type="button" onclick="openModal('modalRevisiLogbook')" class="px-3 py-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-700 font-bold text-[11px]">
-              Minta Revisi
-            </button>
-            <button type="button" onclick="showToast('Logbook Siti Nurhaliza berhasil disahkan.')" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-[11px]">
-              Sahkan Logbook
-            </button>
-          </div>
-        </div>
-      </div>
-    </section>
+        </section>
 
-    <!-- Daftar Siswa Magang di Mitra & Input Nilai Cepat -->
-    <section class="lg:col-span-5 bg-white rounded-2xl border border-slate-200/90 p-5 shadow-xs space-y-4">
-      <div class="flex items-center justify-between">
-        <h2 class="text-sm font-black text-slate-900 flex items-center gap-2">
-          <i class="fa-solid id-card text-indigo-600"></i>
-          <span>Daftar Siswa Bimbingan Lapangan</span>
-        </h2>
-        <span class="text-[10px] font-bold text-slate-400">Total: 14 Siswa</span>
-      </div>
+        <section class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4" aria-label="Ringkasan PKL">
+            @foreach ([
+                ['Siswa Bimbingan', $siswas->count(), 'Siswa terdaftar di mitra', 'fa-users', 'sky'],
+                ['Logbook Menunggu', $pendingCount, 'Perlu diperiksa', 'fa-clock', 'amber'],
+                ['Sudah Dinilai', $assessedCount.' / '.$siswas->count(), 'Penilaian dari pihak industri', 'fa-award', 'indigo'],
+                ['Hadir Hari Ini', $attendanceToday, 'Siswa tercatat hadir', 'fa-calendar-check', 'emerald'],
+            ] as [$label, $value, $description, $icon, $color])
+                <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                    <div class="flex items-start justify-between gap-3">
+                        <p class="text-xs font-bold text-slate-500">{{ $label }}</p>
+                        <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-{{ $color }}-50 text-{{ $color }}-600"><i class="fa-solid {{ $icon }}" aria-hidden="true"></i></span>
+                    </div>
+                    <p class="mt-3 text-3xl font-black text-slate-900">{{ $value }}</p>
+                    <p class="mt-1 text-[11px] text-slate-500">{{ $description }}</p>
+                </div>
+            @endforeach
+        </section>
 
-      <div class="space-y-2.5 text-xs">
-        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center justify-between">
-          <div>
-            <div class="font-extrabold text-slate-900">Rizky Pratama</div>
-            <div class="text-[10px] text-slate-500">XII PPLG 1 &bull; Status: Hadir</div>
-          </div>
-          <span class="px-2.5 py-1 rounded bg-emerald-50 text-emerald-700 font-bold text-[10px]">Nilai: 92</span>
-        </div>
+        <div class="grid grid-cols-1 gap-5 xl:grid-cols-5">
+            <section class="space-y-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm xl:col-span-3">
+                <div class="flex items-center justify-between gap-3">
+                    <div>
+                        <h2 class="text-sm font-black text-slate-900">Logbook Menunggu Pengesahan</h2>
+                        <p class="mt-1 text-[11px] text-slate-500">Aktivitas siswa yang menunggu pemeriksaan Anda.</p>
+                    </div>
+                    <a href="{{ route('dudi.logbook') }}" class="shrink-0 text-xs font-bold text-sky-700 hover:text-sky-900">Lihat semua <i class="fa-solid fa-arrow-right ml-1" aria-hidden="true"></i></a>
+                </div>
+                <div class="space-y-3">
+                    @forelse ($logbooks as $logbook)
+                        <article class="rounded-xl border border-slate-200 bg-slate-50 p-4">
+                            <div class="flex flex-wrap items-start justify-between gap-2">
+                                <div>
+                                    <p class="text-xs font-extrabold text-slate-900">{{ $logbook->siswa?->nama ?? $logbook->siswa?->user?->name ?? 'Siswa' }}</p>
+                                    <p class="mt-1 text-[10px] text-slate-500">{{ $logbook->tanggal?->translatedFormat('d M Y') }} · {{ $logbook->siswa?->kelas }} {{ $logbook->siswa?->jurusan }}</p>
+                                </div>
+                                <span class="rounded-full bg-amber-100 px-2.5 py-1 text-[10px] font-bold text-amber-800">Menunggu</span>
+                            </div>
+                            <p class="mt-3 line-clamp-3 text-xs leading-relaxed text-slate-600">{{ $logbook->kegiatan }}</p>
+                        </article>
+                    @empty
+                        <div class="rounded-xl border border-dashed border-slate-300 px-4 py-8 text-center">
+                            <i class="fa-regular fa-circle-check text-2xl text-emerald-500" aria-hidden="true"></i>
+                            <p class="mt-2 text-sm font-bold text-slate-700">Tidak ada logbook tertunda</p>
+                            <p class="mt-1 text-xs text-slate-500">Logbook baru akan muncul di bagian ini.</p>
+                        </div>
+                    @endforelse
+                </div>
+            </section>
 
-        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center justify-between">
-          <div>
-            <div class="font-extrabold text-slate-900">Siti Nurhaliza</div>
-            <div class="text-[10px] text-slate-500">XII PPLG 2 &bull; Status: Hadir</div>
-          </div>
-          <span class="px-2.5 py-1 rounded bg-emerald-50 text-emerald-700 font-bold text-[10px]">Nilai: 88</span>
+            <section class="space-y-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm xl:col-span-2">
+                <div>
+                    <h2 class="text-sm font-black text-slate-900">Siswa di Mitra</h2>
+                    <p class="mt-1 text-[11px] text-slate-500">Daftar siswa yang ditempatkan di {{ $dudi?->nama_dudi ?? 'mitra Anda' }}.</p>
+                </div>
+                <div class="divide-y divide-slate-100">
+                    @forelse ($siswas->take(6) as $siswa)
+                        <div class="flex items-center justify-between gap-3 py-3 first:pt-0 last:pb-0">
+                            <div class="min-w-0">
+                                <p class="truncate text-xs font-extrabold text-slate-800">{{ $siswa->nama ?: $siswa->user?->name }}</p>
+                                <p class="mt-1 truncate text-[10px] text-slate-500">{{ $siswa->kelas }} · {{ $siswa->jurusan }}</p>
+                            </div>
+                            <a href="{{ route('dudi.penilaian') }}" class="shrink-0 rounded-lg border border-slate-200 px-2.5 py-1.5 text-[10px] font-bold text-slate-700 hover:bg-slate-50">Nilai</a>
+                        </div>
+                    @empty
+                        <p class="py-8 text-center text-xs text-slate-500">Belum ada siswa yang terhubung dengan akun DUDI ini.</p>
+                    @endforelse
+                </div>
+                @if ($feedbackCount > 0)
+                    <a href="{{ route('dudi.feedback') }}" class="flex items-center justify-between rounded-xl border border-amber-200 bg-amber-50 px-3.5 py-3 text-xs font-bold text-amber-900">
+                        <span><i class="fa-solid fa-circle-exclamation mr-2" aria-hidden="true"></i>Umpan balik baru</span><span>{{ $feedbackCount }}</span>
+                    </a>
+                @endif
+            </section>
         </div>
-
-        <div class="p-3 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center justify-between">
-          <div>
-            <div class="font-extrabold text-slate-900">Dimas Setiawan</div>
-            <div class="text-[10px] text-slate-500">XII PPLG 1 &bull; Status: Hadir</div>
-          </div>
-          <span class="px-2.5 py-1 rounded bg-amber-50 text-amber-700 font-bold text-[10px]">Belum Dinilai</span>
-        </div>
-      </div>
-    </section>
-  </div>
-
-  <!-- Modal Permintaan Revisi Logbook (PRD L3) -->
-  <div id="modalRevisiLogbook" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/50 p-4">
-    <div class="bg-white rounded-2xl border border-slate-200 max-w-md w-full p-5 shadow-xl space-y-4">
-      <div class="flex items-center justify-between">
-        <h3 class="text-sm font-black text-slate-900">Catatan Revisi Logbook (Wajib Diisi)</h3>
-        <button type="button" onclick="closeModal('modalRevisiLogbook')" class="text-slate-400 hover:text-slate-700"><i class="fa-solid fa-xmark"></i></button>
-      </div>
-      <form onsubmit="handleRevisiLogbook(event)" class="space-y-3 text-xs">
-        <div>
-          <label class="block font-bold text-slate-700 mb-1">Alasan / Catatan Perbaikan</label>
-          <textarea rows="3" required placeholder="Tuliskan bagian kegiatan yang kurang jelas atau perlu diperbaiki oleh siswa..." class="w-full px-3 py-2 border border-slate-200 rounded-xl"></textarea>
-        </div>
-        <div class="flex justify-end gap-2">
-          <button type="button" onclick="closeModal('modalRevisiLogbook')" class="px-3.5 py-2 rounded-xl border border-slate-200 font-bold">Batal</button>
-          <button type="submit" class="px-4 py-2 rounded-xl bg-rose-600 text-white font-extrabold">Kirim Permintaan Revisi</button>
-        </div>
-      </form>
     </div>
-  </div>
 @endsection

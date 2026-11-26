@@ -5,6 +5,16 @@
 @section('content')
 <div class="space-y-6">
 
+  @if (!$siswa)
+    <section class="rounded-2xl border border-amber-200 bg-amber-50 p-6 text-amber-950">
+      <h1 class="text-lg font-bold">Profil siswa belum terhubung</h1>
+      <p class="mt-2 text-sm leading-6">
+        Akun ini belum terhubung dengan data siswa, jadi presensi belum dapat ditampilkan atau dikirim.
+        Hubungi administrator sekolah untuk menghubungkan akun dengan profil siswa yang benar.
+      </p>
+    </section>
+  @else
+
   <!-- HEADER -->
   <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
     <div>
@@ -357,6 +367,8 @@
       </table>
     </div>
   </div>
+
+  @endif
 
 </div>
 @endsection

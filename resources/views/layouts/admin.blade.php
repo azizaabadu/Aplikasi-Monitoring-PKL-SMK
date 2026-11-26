@@ -34,53 +34,45 @@
   <div class="flex h-screen w-full overflow-hidden">
 
     <!-- SIDEBAR ADMIN: Tetap diam & memenuhi tinggi layar -->
-    <aside class="w-64 shrink-0 bg-[#13294B] text-white flex flex-col justify-between h-screen overflow-y-auto select-none border-r border-[#1E3A66]">
-      <div>
+    <aside class="w-64 shrink-0 bg-[#0F1E38] text-white flex flex-col justify-between h-screen select-none border-r border-slate-800">
+      <div class="flex min-h-0 flex-1 flex-col">
         <!-- Brand Header -->
-        <div class="px-5 py-4 border-b border-white/10 flex items-center gap-3">
-          <div class="w-9 h-9 rounded-lg bg-[#1D4ED8] flex items-center justify-center font-black text-sm tracking-tight shadow-inner">
-            PK
-          </div>
-          <div>
-            <div class="text-base font-black tracking-tight leading-none">PKL.ID</div>
-            <div class="text-[9px] font-bold tracking-[0.16em] text-sky-300/90 uppercase mt-1 leading-none">
-              PLATFORM VOKASI
-            </div>
-          </div>
+        <div class="px-5 py-4 border-b border-white/10">
+          @include('layouts.partials.brand', ['href' => route('admin.dashboard'), 'caption' => 'Portal Monitoring Vokasi'])
         </div>
 
         <!-- Navigasi Sistem -->
-        <nav class="p-3 space-y-1 text-[11px] font-semibold">
+        <nav class="min-h-0 flex-1 overflow-y-auto p-3 space-y-1 text-[11px] font-semibold">
           <div class="px-3 py-2 text-[9px] font-extrabold uppercase tracking-[0.14em] text-slate-400">
             NAVIGASI SISTEM
           </div>
 
-          <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg {{ request()->routeIs('admin.dashboard') ? 'bg-[#1E3F73] text-white font-bold shadow-sm' : 'text-slate-300 hover:bg-white/5 hover:text-white' }} transition">
+          <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg {{ request()->routeIs('admin.dashboard') ? 'bg-sky-700 text-white font-bold shadow-sm' : 'text-slate-300 hover:bg-white/5 hover:text-white' }} transition">
             <i class="fa-solid fa-table-cells-large w-4 text-center {{ request()->routeIs('admin.dashboard') ? 'text-sky-300' : 'text-slate-400' }}"></i>
             <span>Beranda / Dashboard</span>
           </a>
 
-          <a href="{{ route('admin.dudi-mou') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg {{ request()->routeIs('admin.dudi-mou') ? 'bg-[#1E3F73] text-white font-bold shadow-sm' : 'text-slate-300 hover:bg-white/5 hover:text-white' }} transition">
+          <a href="{{ route('admin.dudi-mou') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg {{ request()->routeIs('admin.dudi-mou') ? 'bg-sky-700 text-white font-bold shadow-sm' : 'text-slate-300 hover:bg-white/5 hover:text-white' }} transition">
             <i class="fa-solid fa-building w-4 text-center {{ request()->routeIs('admin.dudi-mou') ? 'text-sky-300' : 'text-slate-400' }}"></i>
             <span>Kemitraan DUDI &amp; MoU</span>
           </a>
 
-          <a href="{{ route('admin.monitoring-pembimbing') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg {{ request()->routeIs('admin.monitoring-pembimbing') ? 'bg-[#1E3F73] text-white font-bold shadow-sm' : 'text-slate-300 hover:bg-white/5 hover:text-white' }} transition">
+          <a href="{{ route('admin.monitoring-pembimbing') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg {{ request()->routeIs('admin.monitoring-pembimbing') ? 'bg-sky-700 text-white font-bold shadow-sm' : 'text-slate-300 hover:bg-white/5 hover:text-white' }} transition">
             <i class="fa-solid fa-clipboard-check w-4 text-center {{ request()->routeIs('admin.monitoring-pembimbing') ? 'text-sky-300' : 'text-slate-400' }}"></i>
             <span>Monitoring &amp; Pembimbing</span>
           </a>
 
-          <a href="{{ route('admin.manajemen-siswa') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg {{ request()->routeIs('admin.manajemen-siswa') ? 'bg-[#1E3F73] text-white font-bold shadow-sm' : 'text-slate-300 hover:bg-white/5 hover:text-white' }} transition">
+          <a href="{{ route('admin.manajemen-siswa') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg {{ request()->routeIs('admin.manajemen-siswa') ? 'bg-sky-700 text-white font-bold shadow-sm' : 'text-slate-300 hover:bg-white/5 hover:text-white' }} transition">
             <i class="fa-solid fa-user-graduate w-4 text-center {{ request()->routeIs('admin.manajemen-siswa') ? 'text-sky-300' : 'text-slate-400' }}"></i>
             <span>Manajemen Siswa &amp; Penempatan</span>
           </a>
 
-          <a href="{{ route('admin.rekapitulasi-nilai') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg {{ request()->routeIs('admin.rekapitulasi-nilai') ? 'bg-[#1E3F73] text-white font-bold shadow-sm' : 'text-slate-300 hover:bg-white/5 hover:text-white' }} transition">
+          <a href="{{ route('admin.rekapitulasi-nilai') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg {{ request()->routeIs('admin.rekapitulasi-nilai') ? 'bg-sky-700 text-white font-bold shadow-sm' : 'text-slate-300 hover:bg-white/5 hover:text-white' }} transition">
             <i class="fa-solid fa-award w-4 text-center {{ request()->routeIs('admin.rekapitulasi-nilai') ? 'text-sky-300' : 'text-slate-400' }}"></i>
             <span>Rekapitulasi Nilai &amp; Sertifikat</span>
           </a>
 
-          <a href="{{ route('admin.pengaturan-akun') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg {{ request()->routeIs('admin.pengaturan-akun') ? 'bg-[#1E3F73] text-white font-bold shadow-sm' : 'text-slate-300 hover:bg-white/5 hover:text-white' }} transition">
+          <a href="{{ route('admin.pengaturan-akun') }}" class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg {{ request()->routeIs('admin.pengaturan-akun') ? 'bg-sky-700 text-white font-bold shadow-sm' : 'text-slate-300 hover:bg-white/5 hover:text-white' }} transition">
             <i class="fa-solid fa-gear w-4 text-center {{ request()->routeIs('admin.pengaturan-akun') ? 'text-sky-300' : 'text-slate-400' }}"></i>
             <span>Pengaturan Sekolah &amp; Akun</span>
           </a>
@@ -88,7 +80,7 @@
       </div>
 
       <!-- Bagian Bawah Sidebar -->
-      <div class="p-3 space-y-2 border-t border-white/10">
+      <div class="shrink-0 p-3 space-y-2 border-t border-white/10">
         <div class="px-3 py-2.5 rounded-lg bg-[#1B3661] border border-white/10 flex items-center gap-2.5">
           <div class="w-7 h-7 rounded-md bg-sky-500/20 text-sky-300 flex items-center justify-center text-xs shrink-0">
             <i class="fa-solid fa-graduation-cap"></i>

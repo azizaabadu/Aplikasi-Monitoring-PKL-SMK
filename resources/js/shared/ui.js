@@ -65,7 +65,7 @@ function triggerDownload(filename, content, mimeType = 'text/plain;charset=utf-8
     link.href = url;
     link.download = filename;
     link.click();
-    URL.revokeObjectURL(url);
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
 function handleGlobalSearch(event) {
