@@ -83,7 +83,7 @@
         </div>
     </div>
 
-<script src="{{ asset('js/pkl-dashboard.js') }}"></script>
+@vite('resources/js/app.js')
 
 </body>
 </html>
