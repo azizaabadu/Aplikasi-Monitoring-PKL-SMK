@@ -18,7 +18,11 @@ class CheckinController extends Controller
         $siswa = Siswa::query()
             ->where('user_id', $user->id)
             ->with(['dudi', 'guru.user'])
-            ->first() ?? Siswa::query()->with(['dudi', 'guru.user'])->first();
+            ->first();
+
+        if (!$siswa) {
+            session()->flash('warning', 'Akun Anda belum terhubung dengan data profil siswa. Silakan hubungi Administrator sekolah.');
+        }
 
         $today = now()->toDateString();
         $todayCheckin = $siswa ? Absensi::query()
@@ -88,11 +92,10 @@ class CheckinController extends Controller
         ]);
 
         $user = $request->user();
-        $siswa = Siswa::query()->where('user_id', $user->id)->first()
-            ?? Siswa::first();
+        $siswa = Siswa::query()->where('user_id', $user->id)->first();
 
         if (!$siswa) {
-            return back()->with('error', 'Profil siswa tidak ditemukan.');
+            return back()->with('error', 'Profil siswa tidak ditemukan atau belum terhubung dengan akun Anda.');
         }
 
         $today = now()->toDateString();

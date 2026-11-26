@@ -9,6 +9,8 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\SocialLoginController;
+use App\Http\Controllers\Dudi\DashboardController as DudiDashboardController;
+use App\Http\Controllers\Guru\DashboardController as GuruDashboardController;
 use App\Http\Controllers\Kepsek\DashboardController as KepsekDashboardController;
 use App\Http\Controllers\OrangTua\DashboardController as OrangTuaDashboardController;
 use App\Http\Controllers\Siswa\CheckinController as SiswaCheckinController;
@@ -88,20 +90,25 @@ Route::middleware(['auth', 'role:siswa,guru,pembimbing_dudi,orang_tua,kepala_sek
             ->name('penempatan.store');
     });
 
-    // RUTE LENGKAP DASHBOARD & MENU GURU PEMBIMBING
+    // RUTE LENGKAP DASHBOARD & MENU GURU PEMBIMBING (PRD L4, N3, N4)
     Route::prefix('guru')->name('guru.')->middleware('role:guru')->group(function (): void {
-        Route::view('/dashboard', 'guru.dashboard')->name('dashboard');
+        Route::get('/dashboard', [GuruDashboardController::class, 'index'])->name('dashboard');
         Route::view('/presensi', 'guru.presensi')->name('presensi');
-        Route::view('/logbook', 'guru.logbook')->name('logbook');
+        Route::get('/logbook', [GuruDashboardController::class, 'logbook'])->name('logbook');
+        Route::post('/logbook/{jurnal}/komentar', [GuruDashboardController::class, 'komentarLogbook'])->name('logbook.komentar');
         Route::view('/siswa-dudi', 'guru.siswa-dudi')->name('siswa-dudi');
-        Route::view('/penilaian', 'guru.penilaian')->name('penilaian');
+        Route::get('/penilaian', [GuruDashboardController::class, 'penilaian'])->name('penilaian');
+        Route::post('/penilaian/{siswa}', [GuruDashboardController::class, 'storePenilaian'])->name('penilaian.store');
         Route::view('/laporan', 'guru.laporan')->name('laporan');
         Route::view('/pengaturan', 'guru.pengaturan')->name('pengaturan');
     });
 
-    // RUTE DASHBOARD PEMBIMBING DUDI
+    // RUTE DASHBOARD PEMBIMBING DUDI (PRD L3, N2)
     Route::prefix('dudi')->name('dudi.')->middleware('role:pembimbing_dudi')->group(function (): void {
-        Route::view('/dashboard', 'dudi.dashboard')->name('dashboard');
+        Route::get('/dashboard', [DudiDashboardController::class, 'index'])->name('dashboard');
+        Route::post('/logbook/{jurnal}/approve', [DudiDashboardController::class, 'approveLogbook'])->name('logbook.approve');
+        Route::post('/logbook/{jurnal}/reject', [DudiDashboardController::class, 'rejectLogbook'])->name('logbook.reject');
+        Route::post('/penilaian/{siswa}', [DudiDashboardController::class, 'storePenilaian'])->name('penilaian.store');
         Route::get('/umpan-balik/create', function () {
             return back()->with('status', 'Form umpan balik / pelanggaran DUDI sedang disiapkan.');
         })->name('umpan-balik.create');

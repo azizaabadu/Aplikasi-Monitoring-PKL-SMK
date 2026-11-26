@@ -16,15 +16,14 @@ class DashboardController extends Controller
     {
         $user = $request->user();
 
-        // Ambil data siswa yang terhubung dengan akun user
+        // Ambil data siswa yang terhubung langsung dengan akun user yang login
         $siswa = Siswa::query()
             ->where('user_id', $user->id)
             ->with(['dudi', 'guru.user', 'penempatans.dudi'])
             ->first();
 
-        // Fallback jika belum terhubung agar tampilan tidak error
         if (!$siswa) {
-            $siswa = Siswa::query()->with(['dudi', 'guru.user'])->first();
+            session()->flash('warning', 'Akun Anda belum terhubung dengan data profil siswa. Silakan hubungi Administrator sekolah.');
         }
 
         $today = now()->toDateString();
