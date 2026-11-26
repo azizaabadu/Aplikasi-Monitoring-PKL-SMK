@@ -22,11 +22,15 @@ class LogbookController extends Controller
         $siswa = Siswa::query()
             ->where('user_id', $user->id)
             ->with(['dudi', 'guru.user'])
-            ->first() ?? Siswa::query()->with(['dudi', 'guru.user'])->first();
+            ->first();
+
+        if (!$siswa) {
+            session()->flash('warning', 'Akun Anda belum terhubung dengan data profil siswa. Silakan hubungi Administrator sekolah.');
+        }
 
         $statusFilter = $request->query('status'); // all, disetujui, pending, ditolak, draft
 
-        $query = $siswa ? Jurnal::query()->where('siswa_id', $siswa->id) : Jurnal::query();
+        $query = $siswa ? Jurnal::query()->where('siswa_id', $siswa->id) : Jurnal::query()->whereRaw('1 = 0');
 
         if ($statusFilter === 'draft') {
             $query->where('is_draft', true);
@@ -80,10 +84,24 @@ class LogbookController extends Controller
         ]);
 
         $user = $request->user();
-        $siswa = Siswa::query()->where('user_id', $user->id)->first() ?? Siswa::first();
+        $siswa = Siswa::query()->where('user_id', $user->id)->first();
 
         if (!$siswa) {
-            return back()->with('error', 'Profil siswa tidak ditemukan.');
+            return back()->with('error', 'Profil siswa tidak ditemukan atau belum terhubung dengan akun Anda.');
+        }
+
+        // PRD: Batasan satu entri logbook per siswa per tanggal
+        $existingLogbook = Jurnal::query()
+            ->where('siswa_id', $siswa->id)
+            ->whereDate('tanggal', $validated['tanggal'])
+            ->first();
+
+        if ($existingLogbook) {
+            return back()
+                ->withInput()
+                ->withErrors([
+                    'tanggal' => 'Anda sudah memiliki entri logbook untuk tanggal ' . Carbon::parse($validated['tanggal'])->translatedFormat('d F Y') . '. Setiap siswa hanya dapat membuat 1 entri logbook per hari. Silakan sunting draf atau entri yang sudah ada jika memerlukan perubahan.',
+                ]);
         }
 
         $tanggalInput = Carbon::parse($validated['tanggal'])->startOfDay();
@@ -123,10 +141,10 @@ class LogbookController extends Controller
     public function update(Request $request, Jurnal $jurnal): RedirectResponse
     {
         $user = $request->user();
-        $siswa = Siswa::query()->where('user_id', $user->id)->first() ?? Siswa::first();
+        $siswa = Siswa::query()->where('user_id', $user->id)->first();
 
-        if ($siswa && $jurnal->siswa_id !== $siswa->id) {
-            abort(403, 'Anda tidak berhak mengubah logbook ini.');
+        if (!$siswa || $jurnal->siswa_id !== $siswa->id) {
+            abort(403, 'Anda tidak berhak melihat atau mengubah logbook ini.');
         }
 
         if (!$jurnal->is_draft && $jurnal->status === 'Disetujui') {
