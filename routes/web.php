@@ -148,7 +148,7 @@ Route::middleware(['auth', 'role:siswa,guru,pembimbing_dudi,orang_tua,kepala_sek
         Route::get('/mitra', [OrangTuaDashboardController::class, 'mitra'])->name('mitra');
         Route::get('/pengaturan', [OrangTuaDashboardController::class, 'pengaturan'])->name('pengaturan');
         Route::post('/pengaturan/password', [OrangTuaDashboardController::class, 'updatePassword'])->name('pengaturan.password');
-    }); fitur-ui-siswa
+    });
 
     // RUTE DASHBOARD KEPALA SEKOLAH (PRD T6, 5.8)
     Route::prefix('kepsek')->name('kepsek.')->middleware('role:kepala_sekolah,kepsek')->group(function (): void {
@@ -160,5 +160,5 @@ Route::middleware(['auth', 'role:siswa,guru,pembimbing_dudi,orang_tua,kepala_sek
         Route::get('/mitra', [KepsekDashboardController::class, 'mitra'])->name('mitra');
         Route::get('/pengaturan', [KepsekDashboardController::class, 'pengaturan'])->name('pengaturan');
         Route::post('/pengaturan/password', [KepsekDashboardController::class, 'updatePassword'])->name('pengaturan.password');
-    });main
+    });
 });
